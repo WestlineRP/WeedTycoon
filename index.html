@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weed Farm Clicker</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Roboto:wght@400;700&display=swap');
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+            font-family: 'Comic Neue', cursive;
+            background: #a8e6cf;
             color: #333;
             margin: 0;
             padding: 20px;
@@ -17,7 +17,7 @@
             align-items: flex-start;
             min-height: 100vh;
             overflow-y: auto;
-            background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1055490/ss_02bd3d56836ab091f7fc6dd175d9782cb7b23322.1920x1080.jpg?t=1601838439');
+            background-image: url('https://www.shutterstock.com/image-photo/vectorized-cartoon-illustration-cannabis-field-260nw-2610556367.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -28,7 +28,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.5);
             pointer-events: none;
         }
         .container {
@@ -43,67 +43,68 @@
         }
         .game-area {
             grid-column: 1 / 4;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
         .shop-area, .upgrades-area, .achievements-area {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
         .stats-area, .prestige-area {
             grid-column: span 1;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
         .full-row {
             grid-column: 1 / 4;
         }
         h1 {
-            font-size: 48px;
-            color: #228B22;
+            font-size: 60px;
+            color: #2e8b57;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.2);
         }
         h2 {
-            color: #006400;
-            border-bottom: 2px solid #90EE90;
+            color: #228b22;
+            border-bottom: 4px dotted #90ee90;
             padding-bottom: 10px;
+            font-size: 32px;
         }
         #clickButton {
-            background: url('https://www.clipartmax.com/png/middle/156-1563152_cannabis-icon-weed-leaf-outline-png.png') no-repeat center center;
+            background: url('https://static.vecteezy.com/system/resources/thumbnails/067/115/517/small_2x/weed-or-cannabis-mascot-cartoon-character-logo-template-vector.jpg') no-repeat center center;
             background-size: contain;
-            width: 200px;
-            height: 200px;
-            border: 5px solid #228B22;
+            width: 250px;
+            height: 250px;
+            border: 8px solid #7fff00;
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-        #clickButton:hover {
-            transform: scale(1.1);
             box-shadow: 0 15px 30px rgba(0,0,0,0.4);
         }
+        #clickButton:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
         #clickButton:active {
-            transform: scale(0.95);
+            transform: scale(0.95) rotate(-5deg);
         }
         .item-container {
-            background: #f0f8f0;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: box-shadow 0.2s;
+            background: #e0ffe0;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
         }
         .item-container:hover {
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
         }
         .item-content {
             display: flex;
@@ -111,23 +112,20 @@
             align-items: center;
             gap: 20px;
         }
-        .item-text {
-            flex: 1;
-        }
         .buy-button {
-            background: #4CAF50;
+            background: #32cd32;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 15px 30px;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 50px;
             font-weight: bold;
-            font-size: 16px;
-            min-width: 100px;
-            transition: background 0.3s, transform 0.1s;
+            font-size: 18px;
+            min-width: 120px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
         }
         .buy-button:hover {
-            background: #45a049;
+            background: #228b22;
         }
         .buy-button:active {
             transform: scale(0.95);
@@ -136,34 +134,31 @@
             background: #cccccc;
             cursor: not-allowed;
         }
-        .achievement {
-            background: #e8f5e9;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .locked {
-            opacity: 0.6;
-            filter: grayscale(100%);
-        }
         .prestige-button {
-            background: #FFD700;
+            background: #ffd700;
             color: #000;
             border: none;
-            padding: 15px;
+            padding: 20px;
             cursor: pointer;
-            border-radius: 10px;
+            border-radius: 50px;
             width: 100%;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
         }
         .prestige-button:hover {
-            background: #ffed4e;
+            background: #ffec8b;
         }
-        .prestige-button:disabled {
-            background: #cccccc;
+        .achievement {
+            background: #98fb98;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        .locked {
+            opacity: 0.5;
+            filter: grayscale(80%);
         }
         #particle-container {
             position: fixed;
@@ -175,24 +170,25 @@
         }
         .particle {
             position: absolute;
-            background: #4CAF50;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #ff69b4, #ffd700, #32cd32);
             border-radius: 50%;
-            opacity: 0.8;
-            animation: float 3s ease-out forwards;
+            opacity: 0.9;
+            animation: float 2.5s ease-out forwards;
         }
         @keyframes float {
-            0% { transform: translateY(0) scale(1); opacity: 0.8; }
-            100% { transform: translateY(-200px) scale(0); opacity: 0; }
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.9; }
+            100% { transform: translateY(-300px) rotate(360deg) scale(0); opacity: 0; }
         }
         @media (max-width: 1200px) {
             .container { grid-template-columns: 1fr 1fr; }
             .game-area, .full-row { grid-column: 1 / 3; }
-            .stats-area, .prestige-area { grid-column: span 2; }
         }
         @media (max-width: 768px) {
             .container { grid-template-columns: 1fr; }
-            .item-content { flex-direction: column; align-items: flex-start; }
-            .buy-button { align-self: flex-end; }
+            #clickButton { width: 200px; height: 200px; }
+            h1 { font-size: 48px; }
         }
     </style>
 </head>
@@ -232,14 +228,14 @@
        
         <div class="prestige-area">
             <h2>Prestige</h2>
-            <p>Reset your farm for permanent growth bonuses!</p>
+            <p>Reset your farm for super bonuses!</p>
             <p id="prestigeGain">Potential Gain: 0 points</p>
-            <button id="prestigeButton" class="prestige-button" disabled>Prestige Now</button>
+            <button id="prestigeButton" class="prestige-button" disabled>Prestige Now!</button>
         </div>
     </div>
 
     <script>
-        // Game state
+        // (Same game logic as the previous fixed version – unchanged for stability)
         let buds = 0;
         let budsPerSecond = 0;
         let clickValue = 1;
@@ -279,7 +275,6 @@
             { name: 'Idle Farmer', desc: 'Reach 420 BPS.', unlocked: false, condition: () => budsPerSecond >= 420 }
         ];
 
-        // DOM elements
         const budsDisplay = document.getElementById('hitsDisplay');
         const bpsDisplay = document.getElementById('hpsDisplay');
         const clickButton = document.getElementById('clickButton');
@@ -343,7 +338,6 @@
             prestigeGainP.textContent = `Potential Gain: ${gain} points`;
             prestigeBtn.disabled = gain <= 0;
 
-            // Update shop buttons and text
             shopItems.forEach(item => {
                 if (item.button && item.text) {
                     item.button.disabled = buds < item.cost;
@@ -351,7 +345,6 @@
                 }
             });
 
-            // Hide purchased upgrades
             upgrades.forEach(u => {
                 if (u.container) {
                     u.container.style.display = u.purchased ? 'none' : 'block';
@@ -362,7 +355,7 @@
             });
 
             checkAchievements();
-            renderAchievements(); // Only re-render if something unlocked
+            renderAchievements();
         }
 
         function createShop() {
@@ -484,20 +477,16 @@
         function createParticles() {
             const container = document.getElementById('particle-container');
             const rect = clickButton.getBoundingClientRect();
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 12; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
-                p.style.width = `${Math.random() * 15 + 10}px`;
-                p.style.height = p.style.width;
-                p.style.left = `${rect.left + rect.width / 2 + (Math.random() * 60 - 30)}px`;
+                p.style.left = `${rect.left + rect.width / 2 + (Math.random() * 80 - 40)}px`;
                 p.style.top = `${rect.top + rect.height / 2}px`;
-                p.style.background = `hsl(${100 + Math.random() * 40}, 70%, 50%)`;
                 container.appendChild(p);
-                setTimeout(() => p.remove(), 3000);
+                setTimeout(() => p.remove(), 2500);
             }
         }
 
-        // Production loop
         setInterval(() => {
             if (budsPerSecond > 0) {
                 const gain = budsPerSecond / 10;
@@ -507,10 +496,8 @@
             }
         }, 100);
 
-        // Auto-save
         setInterval(saveGame, 30000);
 
-        // Init
         createShop();
         createUpgrades();
         loadGame();
