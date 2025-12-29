@@ -6,7 +6,6 @@
     <title>Weed Farm Clicker</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
         body {
             font-family: 'Roboto', sans-serif;
             background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
@@ -110,7 +109,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px; /* Adds space so button is easier to click */
+            gap: 20px;
         }
         .item-text {
             flex: 1;
@@ -166,10 +165,6 @@
         .prestige-button:disabled {
             background: #cccccc;
         }
-        p {
-            font-size: 18px;
-            margin: 10px 0;
-        }
         #particle-container {
             position: fixed;
             top: 0;
@@ -190,30 +185,14 @@
             100% { transform: translateY(-200px) scale(0); opacity: 0; }
         }
         @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 1fr 1fr;
-            }
-            .game-area, .full-row {
-                grid-column: 1 / 3;
-            }
-            .stats-area, .prestige-area {
-                grid-column: span 2;
-            }
+            .container { grid-template-columns: 1fr 1fr; }
+            .game-area, .full-row { grid-column: 1 / 3; }
+            .stats-area, .prestige-area { grid-column: span 2; }
         }
         @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            .game-area, .shop-area, .upgrades-area, .achievements-area, .stats-area, .prestige-area {
-                grid-column: 1 / 2;
-            }
-            .item-content {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .buy-button {
-                align-self: flex-end;
-            }
+            .container { grid-template-columns: 1fr; }
+            .item-content { flex-direction: column; align-items: flex-start; }
+            .buy-button { align-self: flex-end; }
         }
     </style>
 </head>
@@ -227,22 +206,22 @@
             <p id="hpsDisplay">Buds per second: 0</p>
             <button id="clickButton" title="Harvest Bud!"></button>
         </div>
-        
+       
         <div class="shop-area">
             <h2>Farm Shop</h2>
             <div id="shopItems"></div>
         </div>
-        
+       
         <div class="upgrades-area">
             <h2>Upgrades</h2>
             <div id="upgrades"></div>
         </div>
-        
+       
         <div class="achievements-area">
             <h2>Achievements</h2>
             <div id="achievements"></div>
         </div>
-        
+       
         <div class="stats-area full-row">
             <h2>Stats</h2>
             <p id="totalHits">Total Buds Harvested: 0</p>
@@ -250,7 +229,7 @@
             <p id="prestigePoints">Prestige Points: 0</p>
             <p id="prestigeBonus">Prestige Bonus: +0%</p>
         </div>
-        
+       
         <div class="prestige-area">
             <h2>Prestige</h2>
             <p>Reset your farm for permanent growth bonuses!</p>
@@ -260,6 +239,7 @@
     </div>
 
     <script>
+        // Game state
         let buds = 0;
         let budsPerSecond = 0;
         let clickValue = 1;
@@ -269,23 +249,23 @@
         let prestigeMultiplier = 1;
 
         const shopItems = [
-            { name: 'Seed Planter', cost: 15, bps: 0.1, owned: 0, desc: 'Plants seeds automatically.' },
-            { name: 'Watering System', cost: 100, bps: 1, owned: 0, desc: 'Keeps plants hydrated.' },
-            { name: 'Grow Lights', cost: 500, bps: 5, owned: 0, desc: 'Accelerates growth.' },
-            { name: 'Greenhouse', cost: 3000, bps: 30, owned: 0, desc: 'Controlled environment.' },
-            { name: 'Hydroponic Setup', cost: 15000, bps: 150, owned: 0, desc: 'Soil-less farming.' },
-            { name: 'Outdoor Field', cost: 100000, bps: 1000, owned: 0, desc: 'Massive scale planting.' },
-            { name: 'Automated Harvester', cost: 500000, bps: 5000, owned: 0, desc: 'Mechanical harvesting.' },
-            { name: 'Cannabis Empire', cost: 2000000, bps: 20000, owned: 0, desc: 'Global farm network.' }
+            { name: 'Seed Planter', baseCost: 15, cost: 15, bps: 0.1, owned: 0, desc: 'Plants seeds automatically.', button: null, text: null },
+            { name: 'Watering System', baseCost: 100, cost: 100, bps: 1, owned: 0, desc: 'Keeps plants hydrated.', button: null, text: null },
+            { name: 'Grow Lights', baseCost: 500, cost: 500, bps: 5, owned: 0, desc: 'Accelerates growth.', button: null, text: null },
+            { name: 'Greenhouse', baseCost: 3000, cost: 3000, bps: 30, owned: 0, desc: 'Controlled environment.', button: null, text: null },
+            { name: 'Hydroponic Setup', baseCost: 15000, cost: 15000, bps: 150, owned: 0, desc: 'Soil-less farming.', button: null, text: null },
+            { name: 'Outdoor Field', baseCost: 100000, cost: 100000, bps: 1000, owned: 0, desc: 'Massive scale planting.', button: null, text: null },
+            { name: 'Automated Harvester', baseCost: 500000, cost: 500000, bps: 5000, owned: 0, desc: 'Mechanical harvesting.', button: null, text: null },
+            { name: 'Cannabis Empire', baseCost: 2000000, cost: 2000000, bps: 20000, owned: 0, desc: 'Global farm network.', button: null, text: null }
         ];
 
         const upgrades = [
-            { name: 'Better Seeds', cost: 200, effect: () => clickValue *= 2, desc: 'Doubles harvest per click.', purchased: false },
-            { name: 'Fertilizer', cost: 1000, effect: () => budsPerSecond *= 1.5, desc: '50% boost to production.', purchased: false },
-            { name: 'Premium Strain', cost: 5000, effect: () => clickValue *= 3, desc: 'Triples click harvest.', purchased: false },
-            { name: 'Advanced Hydro', cost: 25000, effect: () => { shopItems.forEach(i => i.bps *= 1.2); recalculateBPS(); }, desc: '20% boost to all producers.', purchased: false },
-            { name: 'Trimming Bots', cost: 100000, effect: () => clickValue += budsPerSecond * 0.2, desc: 'Clicks gain 20% of BPS.', purchased: false },
-            { name: 'Genetic Engineering', cost: 500000, effect: () => budsPerSecond *= 2, desc: 'Doubles all production.', purchased: false }
+            { name: 'Better Seeds', cost: 200, effect: () => clickValue *= 2, desc: 'Doubles harvest per click.', purchased: false, container: null },
+            { name: 'Fertilizer', cost: 1000, effect: () => budsPerSecond *= 1.5, desc: '50% boost to production.', purchased: false, container: null },
+            { name: 'Premium Strain', cost: 5000, effect: () => clickValue *= 3, desc: 'Triples click harvest.', purchased: false, container: null },
+            { name: 'Advanced Hydro', cost: 25000, effect: () => { shopItems.forEach(i => i.bps *= 1.2); recalculateBPS(); }, desc: '20% boost to all producers.', purchased: false, container: null },
+            { name: 'Trimming Bots', cost: 100000, effect: () => clickValue += budsPerSecond * 0.2, desc: 'Clicks gain 20% of BPS.', purchased: false, container: null },
+            { name: 'Genetic Engineering', cost: 500000, effect: () => budsPerSecond *= 2, desc: 'Doubles all production.', purchased: false, container: null }
         ];
 
         const achievements = [
@@ -299,7 +279,7 @@
             { name: 'Idle Farmer', desc: 'Reach 420 BPS.', unlocked: false, condition: () => budsPerSecond >= 420 }
         ];
 
-        // DOM
+        // DOM elements
         const budsDisplay = document.getElementById('hitsDisplay');
         const bpsDisplay = document.getElementById('hpsDisplay');
         const clickButton = document.getElementById('clickButton');
@@ -324,6 +304,7 @@
                 totalClicks = data.totalClicks || 0;
                 prestigePoints = data.prestigePoints || 0;
                 prestigeMultiplier = 1 + prestigePoints * 0.1;
+
                 shopItems.forEach((item, i) => {
                     if (data.shop && data.shop[i]) {
                         item.owned = data.shop[i].owned;
@@ -348,49 +329,63 @@
 
         function recalculateBPS() {
             budsPerSecond = shopItems.reduce((sum, item) => sum + item.bps * item.owned, 0) * prestigeMultiplier;
-            bpsDisplay.textContent = `Buds per second: ${budsPerSecond.toFixed(1)}`;
         }
 
         function updateDisplays() {
             budsDisplay.textContent = `Buds: ${Math.floor(buds)}`;
+            bpsDisplay.textContent = `Buds per second: ${budsPerSecond.toFixed(1)}`;
             totalBudsP.textContent = `Total Buds Harvested: ${Math.floor(totalBuds)}`;
             totalClicksP.textContent = `Total Clicks: ${totalClicks}`;
             prestigePointsP.textContent = `Prestige Points: ${prestigePoints}`;
-            prestigeBonusP.textContent = `Prestige Bonus: +${(prestigeMultiplier - 1) * 100}%`;
+            prestigeBonusP.textContent = `Prestige Bonus: +${((prestigeMultiplier - 1) * 100).toFixed(0)}%`;
+
             const gain = Math.floor(Math.sqrt(totalBuds / 5000));
             prestigeGainP.textContent = `Potential Gain: ${gain} points`;
             prestigeBtn.disabled = gain <= 0;
-            renderShop();
-            renderUpgrades();
-            renderAchievements();
+
+            // Update shop buttons and text
+            shopItems.forEach(item => {
+                if (item.button && item.text) {
+                    item.button.disabled = buds < item.cost;
+                    item.text.innerHTML = `<strong>${item.name} (${item.owned})</strong><br>${item.desc}<br>Cost: ${Math.floor(item.cost)} buds | +${item.bps.toFixed(1)} BPS`;
+                }
+            });
+
+            // Hide purchased upgrades
+            upgrades.forEach(u => {
+                if (u.container) {
+                    u.container.style.display = u.purchased ? 'none' : 'block';
+                    if (!u.purchased && u.container.querySelector('.buy-button')) {
+                        u.container.querySelector('.buy-button').disabled = buds < u.cost;
+                    }
+                }
+            });
+
             checkAchievements();
+            renderAchievements(); // Only re-render if something unlocked
         }
 
-        function renderShop() {
+        function createShop() {
             shopDiv.innerHTML = '';
             shopItems.forEach((item, idx) => {
                 const container = document.createElement('div');
                 container.className = 'item-container';
                 container.innerHTML = `
                     <div class="item-content">
-                        <div class="item-text">
-                            <strong>${item.name} (${item.owned})</strong><br>
-                            ${item.desc}<br>
-                            Cost: ${Math.floor(item.cost)} buds | +${item.bps} BPS
-                        </div>
-                        <button class="buy-button" ${buds < item.cost ? 'disabled' : ''}>Buy</button>
+                        <div class="item-text"></div>
+                        <button class="buy-button">Buy</button>
                     </div>
                 `;
-                const button = container.querySelector('button');
-                button.addEventListener('click', () => buyItem(idx));
+                item.text = container.querySelector('.item-text');
+                item.button = container.querySelector('.buy-button');
+                item.button.addEventListener('click', () => buyItem(idx));
                 shopDiv.appendChild(container);
             });
         }
 
-        function renderUpgrades() {
+        function createUpgrades() {
             upgradesDiv.innerHTML = '';
             upgrades.forEach((u, idx) => {
-                if (u.purchased) return;
                 const container = document.createElement('div');
                 container.className = 'item-container';
                 container.innerHTML = `
@@ -400,11 +395,12 @@
                             ${u.desc}<br>
                             Cost: ${u.cost} buds
                         </div>
-                        <button class="buy-button" ${buds < u.cost ? 'disabled' : ''}>Buy</button>
+                        <button class="buy-button">Buy</button>
                     </div>
                 `;
-                const button = container.querySelector('button');
+                const button = container.querySelector('.buy-button');
                 button.addEventListener('click', () => buyUpgrade(idx));
+                u.container = container;
                 upgradesDiv.appendChild(container);
             });
         }
@@ -444,14 +440,11 @@
         }
 
         function checkAchievements() {
-            let updated = false;
             achievements.forEach(a => {
                 if (!a.unlocked && a.condition()) {
                     a.unlocked = true;
-                    updated = true;
                 }
             });
-            if (updated) renderAchievements();
         }
 
         clickButton.addEventListener('click', () => {
@@ -469,29 +462,24 @@
             if (gain > 0 && confirm('Prestige? This will reset everything for permanent bonuses!')) {
                 prestigePoints += gain;
                 prestigeMultiplier = 1 + prestigePoints * 0.1;
+
                 buds = 0;
                 totalBuds = 0;
                 totalClicks = 0;
                 budsPerSecond = 0;
                 clickValue = 1;
-                shopItems.forEach(i => { i.owned = 0; i.cost = i.originalCost || i.cost; });
+
+                shopItems.forEach(i => {
+                    i.owned = 0;
+                    i.cost = i.baseCost;
+                });
                 upgrades.forEach(u => u.purchased = false);
+
                 recalculateBPS();
                 updateDisplays();
                 saveGame();
             }
         });
-
-        setInterval(() => {
-            if (budsPerSecond > 0) {
-                const gain = budsPerSecond / 10;
-                buds += gain;
-                totalBuds += gain;
-                updateDisplays();
-            }
-        }, 100);
-
-        setInterval(saveGame, 30000);
 
         function createParticles() {
             const container = document.getElementById('particle-container');
@@ -509,10 +497,25 @@
             }
         }
 
+        // Production loop
+        setInterval(() => {
+            if (budsPerSecond > 0) {
+                const gain = budsPerSecond / 10;
+                buds += gain;
+                totalBuds += gain;
+                updateDisplays();
+            }
+        }, 100);
+
+        // Auto-save
+        setInterval(saveGame, 30000);
+
         // Init
-        shopItems.forEach(i => i.originalCost = i.cost);
+        createShop();
+        createUpgrades();
         loadGame();
         updateDisplays();
+        renderAchievements();
     </script>
 </body>
 </html>
