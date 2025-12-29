@@ -16,7 +16,6 @@
             background-image: url('https://img.freepik.com/premium-photo/cannabis-bushes-cartoon-illustration-marijuana-back_999671-3579.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -38,39 +37,39 @@
             position: relative;
             z-index: 3;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1000px;
             height: 100vh;
             display: flex;
         }
-        /* Sidebar */
+        /* Sidebar - smaller */
         .sidebar {
-            width: 100px;
+            width: 80px;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 0 30px 30px 0;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+            border-radius: 0 25px 25px 0;
+            box-shadow: 8px 0 25px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 0;
-            gap: 30px;
+            padding: 15px 0;
+            gap: 25px;
         }
         .menu-btn {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             background: #32cd32;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             transition: transform 0.2s, background 0.3s;
-            background-size: 60%;
+            background-size: 70%;
             background-repeat: no-repeat;
             background-position: center;
         }
         .menu-btn:hover {
-            transform: scale(1.15);
+            transform: scale(1.2);
             background-color: #228b22;
         }
-        /* Main game area */
+        /* Main game area - more compact */
         .game-area {
             flex: 1;
             display: flex;
@@ -78,31 +77,32 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 20px;
         }
         h1 {
-            font-size: 60px;
+            font-size: 48px;
             color: #2e8b57;
-            margin: 0 0 20px;
-            text-shadow: 4px 4px 8px rgba(0,0,0,0.2);
+            margin: 0 0 15px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
         }
         .top-stats {
             background: rgba(255, 255, 255, 0.9);
-            padding: 15px 30px;
-            border-radius: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            font-size: 24px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            font-size: 20px;
         }
         #clickButton {
-            background: url('https://static.vecteezy.com/system/resources/thumbnails/056/017/691/small/grin-marijuana-leaf-cartoon-photo.jpg') no-repeat center center;
+            background: url('https://img.freepik.com/premium-photo/cartoon-marijuana-leaf-with-smiling-face-weed_1124848-125192.jpg') no-repeat center center;
             background-size: contain;
-            width: 300px;
-            height: 300px;
-            border: 10px solid #7fff00;
+            width: 220px;
+            height: 220px;
+            border: 8px solid #7fff00;
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
         }
         #clickButton:hover {
             transform: scale(1.1) rotate(8deg);
@@ -110,7 +110,7 @@
         #clickButton:active {
             transform: scale(0.95);
         }
-        /* Modal Panels */
+        /* Modals - smaller and tighter */
         .modal {
             display: none;
             position: fixed;
@@ -122,87 +122,85 @@
         }
         .modal-content {
             background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 30px;
-            width: 80%;
-            max-width: 800px;
-            max-height: 90vh;
+            padding: 25px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
         .close-btn {
             position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 50px;
+            top: 10px;
+            right: 20px;
+            font-size: 40px;
             cursor: pointer;
             color: #ff4444;
-            background: none;
-            border: none;
         }
         .close-btn:hover {
             transform: scale(1.2);
         }
+        h2 { font-size: 28px; margin-top: 0; }
         .item-container {
             background: #e0ffe0;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 20px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
         }
         .item-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
+            font-size: 16px;
         }
         .buy-button {
             background: #32cd32;
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 12px 25px;
             cursor: pointer;
-            border-radius: 50px;
+            border-radius: 40px;
             font-weight: bold;
-            font-size: 18px;
-            min-width: 120px;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            font-size: 16px;
+            min-width: 100px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         .buy-button:hover { background: #228b22; }
-        .buy-button:disabled { background: #cccccc; cursor: not-allowed; }
+        .buy-button:disabled { background: #cccccc; }
         .prestige-button {
             background: #ffd700;
-            color: #000;
-            border: none;
-            padding: 20px;
-            cursor: pointer;
-            border-radius: 50px;
+            padding: 15px;
+            font-size: 20px;
+            border-radius: 40px;
             width: 100%;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
         }
-        .prestige-button:hover { background: #ffec8b; }
         .achievement {
-            background: #98fb98;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 20px;
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: 15px;
+            font-size: 16px;
         }
-        .locked { opacity: 0.5; filter: grayscale(80%); }
         .particle {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, #ff69b4, #ffd700, #32cd32);
-            border-radius: 50%;
-            opacity: 0.9;
+            width: 15px;
+            height: 15px;
             animation: float 2.5s ease-out forwards;
         }
         @keyframes float {
             0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.9; }
-            100% { transform: translateY(-300px) rotate(360deg) scale(0); opacity: 0; }
+            100% { transform: translateY(-250px) rotate(360deg) scale(0); opacity: 0; }
+        }
+        /* Better mobile */
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 80px; border-radius: 0 0 25px 25px; flex-direction: row; padding: 10px 0; }
+            #clickButton { width: 180px; height: 180px; }
+            h1 { font-size: 40px; }
+            .top-stats { font-size: 18px; padding: 8px 15px; }
         }
     </style>
 </head>
@@ -213,11 +211,11 @@
     <div class="main-container">
         <!-- Sidebar Menu -->
         <div class="sidebar">
-            <div class="menu-btn" id="shopBtn" style="background-image: url('https://thumbs.dreamstime.com/b/small-local-shop-building-facade-art-vector-design-generative-ai-cute-flat-green-awning-perfect-business-marketing-420176125.jpg');" title="Shop"></div>
-            <div class="menu-btn" id="upgradesBtn" style="background-image: url('https://png.pngtree.com/png-clipart/20230802/original/pngtree-three-cute-arrows-concepts-pointing-isolated-vector-picture-image_9231779.png');" title="Upgrades"></div>
-            <div class="menu-btn" id="achBtn" style="background-image: url('https://static.vecteezy.com/system/resources/thumbnails/050/024/334/small/victory-smiles-cartoon-trophy-cup-with-happy-face-achievement-award-icon-vector.jpg');" title="Achievements"></div>
+            <div class="menu-btn" id="shopBtn" style="background-image: url('https://img.freepik.com/premium-vector/you-win-shop-menu-pop-up-with-cute-cat-magnet-bomb-game-icons_98054-171.jpg');" title="Shop"></div>
+            <div class="menu-btn" id="upgradesBtn" style="background-image: url('https://static.vecteezy.com/system/resources/previews/012/177/827/non_2x/cute-cartoon-arrow-icon-set-free-vector.jpg');" title="Upgrades"></div>
+            <div class="menu-btn" id="achBtn" style="background-image: url('https://thumbs.dreamstime.com/b/victory-smiles-cartoon-trophy-cup-happy-face-award-achievement-success-icon-339060947.jpg');" title="Achievements"></div>
             <div class="menu-btn" id="statsBtn" style="background-image: url('https://img.freepik.com/premium-vector/increase-money-growth-statistics-chart-concept-yellow-realistic-3d-cute-cartoon-style-white-transparent-background_369481-1480.jpg');" title="Stats"></div>
-            <div class="menu-btn" id="prestigeBtnMenu" style="background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20250317/pngtree-shiny-gold-star-golden-icon-image_17091266.jpg');" title="Prestige"></div>
+            <div class="menu-btn" id="prestigeBtnMenu" style="background-image: url('https://www.shutterstock.com/image-vector/star-reward-coin-icon-vector-260nw-2626847619.jpg');" title="Prestige"></div>
         </div>
 
         <!-- Main Game Area -->
@@ -231,7 +229,7 @@
         </div>
     </div>
 
-    <!-- Modals -->
+    <!-- Modals (same as before) -->
     <div id="shopModal" class="modal">
         <div class="modal-content">
             <button class="close-btn">&times;</button>
@@ -278,7 +276,7 @@
     </div>
 
     <script>
-        // Game logic (same as before, just adapted to new DOM)
+        // Game logic remains exactly the same as the previous version (stable and fixed)
         let buds = 0;
         let budsPerSecond = 0;
         let clickValue = 1;
@@ -318,7 +316,6 @@
             { name: 'Idle Farmer', desc: 'Reach 420 BPS.', unlocked: false, condition: () => budsPerSecond >= 420 }
         ];
 
-        // DOM
         const budsDisplay = document.getElementById('hitsDisplay');
         const bpsDisplay = document.getElementById('hpsDisplay');
         const clickButton = document.getElementById('clickButton');
@@ -332,7 +329,6 @@
         const prestigeGainP = document.getElementById('prestigeGain');
         const prestigeBtn = document.getElementById('prestigeButton');
 
-        // Modals
         const modals = {
             shop: document.getElementById('shopModal'),
             upgrades: document.getElementById('upgradesModal'),
@@ -355,7 +351,6 @@
         document.getElementById('statsBtn').addEventListener('click', () => { closeAllModals(); modals.stats.style.display = 'flex'; });
         document.getElementById('prestigeBtnMenu').addEventListener('click', () => { closeAllModals(); modals.prestige.style.display = 'flex'; });
 
-        // Game functions (unchanged except updateDisplays now also updates stats modal)
         function loadGame() {
             const saved = localStorage.getItem('weedFarmClickerSave');
             if (saved) {
@@ -405,7 +400,6 @@
             prestigeGainP.textContent = `Potential Gain: ${gain} points`;
             prestigeBtn.disabled = gain <= 0;
 
-            // Update shop
             shopItems.forEach(item => {
                 if (item.button && item.text) {
                     item.button.disabled = buds < item.cost;
@@ -413,7 +407,6 @@
                 }
             });
 
-            // Update upgrades
             upgrades.forEach(u => {
                 if (u.container) {
                     u.container.style.display = u.purchased ? 'none' : 'block';
@@ -556,7 +549,6 @@
 
         setInterval(saveGame, 30000);
 
-        // Init
         createShop();
         createUpgrades();
         loadGame();
