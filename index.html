@@ -3,415 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌿 Weed Shaft Tycoon 🌿</title>
+    <title>420 Weed Smoking Clicker</title>
     <style>
         body {
+            font-family: 'Arial', sans-serif;
+            background-color: #228B22; /* Forest green */
+            color: #FFFFFF;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #0a420a 0%, #1a5a1a 50%, #006400 100%);
-            color: #fff;
-            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
             min-height: 100vh;
-            overflow-x: auto;
+            overflow-y: auto;
         }
-        #container {
+        .container {
             max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
         }
-        h1 {
+        .game-area {
+            flex: 1;
+            background-color: #006400; /* Dark green */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        .shop-area, .upgrades-area, .achievements-area, .stats-area, .prestige-area {
+            flex: 1;
+            background-color: #006400;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        h1, h2 {
             text-align: center;
-            font-size: 3em;
-            text-shadow: 0 0 20px #90EE90;
-            margin-bottom: 20px;
+            color: #32CD32; /* Lime green */
         }
-        #stats {
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 30px;
-        }
-        #stats div {
-            margin: 10px 0;
-            text-shadow: 0 0 10px #FFD700;
-        }
-        #farmCanvas {
-            width: 90vw;
-            max-width: 640px;
-            height: auto;
-            border: 3px solid #90EE90;
-            border-radius: 20px;
+        #clickButton {
             display: block;
             margin: 20px auto;
+            padding: 20px;
+            font-size: 24px;
+            background-color: #32CD32;
+            color: #000;
+            border: none;
+            border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 30px rgba(144, 238, 144, 0.5);
+            width: 150px;
+            height: 150px;
+            transition: transform 0.1s;
+        }
+        #clickButton:hover {
+            transform: scale(1.1);
+        }
+        #clickButton:active {
+            transform: scale(0.9);
+        }
+        .item {
+            background-color: #228B22;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .buy-button {
+            background-color: #32CD32;
+            color: #000;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .buy-button:disabled {
+            background-color: #A9A9A9;
+            cursor: not-allowed;
+        }
+        .achievement {
+            background-color: #228B22;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .locked {
+            opacity: 0.5;
+        }
+        .prestige-button {
+            background-color: #FFD700; /* Gold */
+            color: #000;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 18px;
+        }
+        .prestige-button:disabled {
+            background-color: #A9A9A9;
+            cursor: not-allowed;
+        }
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background-color: #32CD32;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float 2s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.8; }
+            100% { transform: translateY(-50px); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <div id="container">
-        <h1>🌿 Weed Shaft Tycoon 🌿</h1>
-        <div id="stats">
-            <div id="cash">Cash: $0</div>
-            <div id="persec">Per second: $0</div>
+    <div id="particle-container"></div>
+    <div class="container">
+        <div class="game-area">
+            <h1>420 Weed Smoking Clicker</h1>
+            <p id="hitsDisplay">Hits: 0</p>
+            <p id="hpsDisplay">Hits per second: 0</p>
+            <button id="clickButton">Take a Hit! 🌿</button>
         </div>
-        <canvas id="farmCanvas" width="640" height="800"></canvas>
+        
+        <div class="shop-area">
+            <h2>Shop</h2>
+            <div id="shopItems"></div>
+        </div>
+        
+        <div class="upgrades-area">
+            <h2>Upgrades</h2>
+            <div id="upgrades"></div>
+        </div>
+        
+        <div class="achievements-area">
+            <h2>Achievements</h2>
+            <div id="achievements"></div>
+        </div>
+        
+        <div class="stats-area">
+            <h2>Stats</h2>
+            <p id="totalHits">Total Hits: 0</p>
+            <p id="totalClicks">Total Clicks: 0</p>
+            <p id="prestigePoints">Prestige Points: 0</p>
+            <p id="prestigeBonus">Prestige Bonus: 0%</p>
+        </div>
+        
+        <div class="prestige-area">
+            <h2>Prestige</h2>
+            <p>Reset progress for permanent bonuses!</p>
+            <p id="prestigeGain">Next Prestige: 0 points</p>
+            <button id="prestigeButton" class="prestige-button" disabled>Prestige Now</button>
+        </div>
     </div>
 
     <script>
-        let game = {
-            cash: 0,
-            tps: 0,
-            lastUpdate: Date.now(),
-            floors: [
-                {name: '🗑️ Trash Can', baseCost: 15, count: 0, prod: 0.1, costMult: 1.15, color: '#006400'},
-                {name: '🚿 Sink Grow', baseCost: 100, count: 0, prod: 0.8, costMult: 1.15, color: '#32CD32'},
-                {name: '👕 Closet', baseCost: 690, count: 0, prod: 4.5, costMult: 1.15, color: '#228B22'},
-                {name: '⛺ Grow Tent', baseCost: 4500, count: 0, prod: 25, costMult: 1.15, color: '#20B2AA'},
-                {name: '🛏️ Spare Room', baseCost: 31000, count: 0, prod: 130, costMult: 1.15, color: '#9370DB'},
-                {name: '🏠 Basement', baseCost: 260000, count: 0, prod: 650, costMult: 1.15, color: '#DAA520'},
-                {name: '🚗 Garage', baseCost: 2600000, count: 0, prod: 3300, costMult: 1.15, color: '#FF8C00'},
-                {name: '🏭 Warehouse', baseCost: 30000000, count: 0, prod: 18000, costMult: 1.15, color: '#FF69B4'},
-                {name: '🧪 Underground Lab', baseCost: 400000000, count: 0, prod: 110000, costMult: 1.15, color: '#00FFFF'},
-                {name: '🌆 Entire Block', baseCost: 7000000000, count: 0, prod: 750000, costMult: 1.15, color: '#FF00FF'}
-            ]
-        };
+        let hits = 0;
+        let hitsPerSecond = 0;
+        let clickValue = 1;
+        let totalHits = 0;
+        let totalClicks = 0;
+        let prestigePoints = 0;
+        let prestigeBonus = 1; // Multiplier from prestige
 
-        let canvas, ctx, workerPhases, products, buttonRects, lastFrame = 0;
+        // Shop items (auto-producers)
+        const shopItems = [
+            { name: 'Joint Roller', cost: 10, hps: 0.1, owned: 0, desc: 'Rolls joints automatically.' },
+            { name: 'Bong', cost: 50, hps: 0.5, owned: 0, desc: 'Smooth hits every second.' },
+            { name: 'Vape Pen', cost: 200, hps: 2, owned: 0, desc: 'Discreet auto-vaping.' },
+            { name: 'Grow Tent', cost: 1000, hps: 10, owned: 0, desc: 'Grows your own supply.' },
+            { name: 'Dispensary', cost: 5000, hps: 50, owned: 0, desc: 'Unlimited access.' },
+            { name: 'Weed Farm', cost: 20000, hps: 200, owned: 0, desc: 'Industrial scale.' },
+            { name: 'THC Lab', cost: 100000, hps: 1000, owned: 0, desc: 'Synthesizes pure THC.' },
+            { name: 'Cannabis Empire', cost: 500000, hps: 5000, owned: 0, desc: 'Global domination.' }
+        ];
 
-        const FLOOR_HEIGHT = 80;
-        const NUM_FLOORS = 10;
+        // Upgrades (multipliers and bonuses)
+        const upgrades = [
+            { name: 'Better Strain', cost: 100, effect: () => clickValue *= 2, desc: 'Doubles click value.', purchased: false },
+            { name: 'Auto Inhaler', cost: 500, effect: () => hitsPerSecond *= 1.5, desc: 'Boosts HPS by 50%.', purchased: false },
+            { name: 'Golden Lighter', cost: 2000, effect: () => clickValue *= 3, desc: 'Triples click value.', purchased: false },
+            { name: 'Hydroponics', cost: 10000, effect: () => { shopItems.forEach(item => item.hps *= 1.2); recalculateHPS(); }, desc: '20% boost to all producers.', purchased: false },
+            { name: 'Edibles Infusion', cost: 50000, effect: () => clickValue += hitsPerSecond * 0.1, desc: 'Clicks gain 10% of HPS.', purchased: false },
+            { name: 'CBD Synergy', cost: 200000, effect: () => hitsPerSecond *= 2, desc: 'Doubles HPS.', purchased: false }
+        ];
 
-        function formatNumber(num) {
-            if (num === 0) return '0';
-            const suffixes = ['', 'K', 'M', 'B', 'T'];
-            let i = 0;
-            while (num >= 1000 && i < suffixes.length - 1) {
-                num /= 1000;
-                i++;
+        // Achievements
+        const achievements = [
+            { name: 'First Puff', desc: 'Take your first hit.', unlocked: false, condition: () => totalClicks >= 1 },
+            { name: 'Stoner', desc: 'Reach 100 hits.', unlocked: false, condition: () => totalHits >= 100 },
+            { name: 'High Roller', desc: 'Own 10 Joint Rollers.', unlocked: false, condition: () => shopItems[0].owned >= 10 },
+            { name: 'Baked', desc: 'Reach 1,000 hits.', unlocked: false, condition: () => totalHits >= 1000 },
+            { name: 'Empire Builder', desc: 'Own a Cannabis Empire.', unlocked: false, condition: () => shopItems[7].owned >= 1 },
+            { name: 'Prestige Master', desc: 'Prestige once.', unlocked: false, condition: () => prestigePoints >= 1 },
+            { name: 'Click Maniac', desc: 'Click 420 times.', unlocked: false, condition: () => totalClicks >= 420 },
+            { name: 'Auto High', desc: 'Reach 420 HPS.', unlocked: false, condition: () => hitsPerSecond >= 420 }
+        ];
+
+        // DOM elements
+        const hitsDisplay = document.getElementById('hitsDisplay');
+        const hpsDisplay = document.getElementById('hpsDisplay');
+        const clickButton = document.getElementById('clickButton');
+        const shopItemsDiv = document.getElementById('shopItems');
+        const upgradesDiv = document.getElementById('upgrades');
+        const achievementsDiv = document.getElementById('achievements');
+        const totalHitsP = document.getElementById('totalHits');
+        const totalClicksP = document.getElementById('totalClicks');
+        const prestigePointsP = document.getElementById('prestigePoints');
+        const prestigeBonusP = document.getElementById('prestigeBonus');
+        const prestigeGainP = document.getElementById('prestigeGain');
+        const prestigeButton = document.getElementById('prestigeButton');
+
+        // Load game state if available
+        function loadGame() {
+            const saved = localStorage.getItem('weedClickerSave');
+            if (saved) {
+                const data = JSON.parse(saved);
+                hits = data.hits || 0;
+                hitsPerSecond = data.hps || 0;
+                clickValue = data.clickValue || 1;
+                totalHits = data.totalHits || 0;
+                totalClicks = data.totalClicks || 0;
+                prestigePoints = data.prestigePoints || 0;
+                prestigeBonus = 1 + (prestigePoints * 0.1); // 10% bonus per point
+                shopItems.forEach((item, i) => {
+                    item.owned = data.shop[i]?.owned || 0;
+                    item.cost = data.shop[i]?.cost || item.cost;
+                });
+                upgrades.forEach((upgrade, i) => upgrade.purchased = data.upgrades[i] || false);
+                achievements.forEach((ach, i) => ach.unlocked = data.achievements[i] || false);
+                recalculateHPS();
             }
-            return (Math.round(num * 10) / 10) + suffixes[i];
         }
 
-        function calcTps() {
-            game.tps = 0;
-            game.floors.forEach(floor => {
-                game.tps += floor.prod * floor.count;
+        // Save game state
+        function saveGame() {
+            const data = {
+                hits,
+                hps: hitsPerSecond,
+                clickValue,
+                totalHits,
+                totalClicks,
+                prestigePoints,
+                shop: shopItems.map(item => ({ owned: item.owned, cost: item.cost })),
+                upgrades: upgrades.map(upgrade => upgrade.purchased),
+                achievements: achievements.map(ach => ach.unlocked)
+            };
+            localStorage.setItem('weedClickerSave', JSON.stringify(data));
+        }
+
+        // Recalculate HPS
+        function recalculateHPS() {
+            hitsPerSecond = shopItems.reduce((total, item) => total + (item.hps * item.owned), 0) * prestigeBonus;
+            hpsDisplay.textContent = `Hits per second: ${hitsPerSecond.toFixed(1)}`;
+        }
+
+        // Update displays
+        function updateDisplays() {
+            hitsDisplay.textContent = `Hits: ${Math.floor(hits)}`;
+            totalHitsP.textContent = `Total Hits: ${Math.floor(totalHits)}`;
+            totalClicksP.textContent = `Total Clicks: ${totalClicks}`;
+            prestigePointsP.textContent = `Prestige Points: ${prestigePoints}`;
+            prestigeBonusP.textContent = `Prestige Bonus: ${(prestigeBonus - 1) * 100}%`;
+            const potentialPrestige = Math.floor(Math.sqrt(totalHits / 1000));
+            prestigeGainP.textContent = `Next Prestige: ${potentialPrestige} points`;
+            prestigeButton.disabled = potentialPrestige === 0;
+            renderShop();
+            renderUpgrades();
+            renderAchievements();
+            checkAchievements();
+        }
+
+        // Render shop items
+        function renderShop() {
+            shopItemsDiv.innerHTML = '';
+            shopItems.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                    <span>${item.name} (${item.owned}) - ${item.desc}<br>Cost: ${Math.floor(item.cost)} hits - +${item.hps} HPS</span>
+                    <button class="buy-button" ${hits < item.cost ? 'disabled' : ''}>Buy</button>
+                `;
+                div.querySelector('button').addEventListener('click', () => buyShopItem(index));
+                shopItemsDiv.appendChild(div);
             });
         }
 
-        function saveGame() {
-            localStorage.setItem('weedShaftTycoon', JSON.stringify(game));
-        }
-
-        function loadGame() {
-            const saved = localStorage.getItem('weedShaftTycoon');
-            if (saved) {
-                try {
-                    const loaded = JSON.parse(saved);
-                    game.cash = loaded.cash || 0;
-                    game.floors = loaded.floors.map((f, i) => ({...game.floors[i], ...f})) || game.floors;
-                    game.lastUpdate = loaded.lastUpdate || Date.now();
-                } catch (e) {
-                    console.log('Load failed, starting new game.');
-                }
-            }
-        }
-
-        function display() {
-            document.getElementById('cash').textContent = 'Cash: $' + formatNumber(game.cash);
-            document.getElementById('persec').textContent = 'Per second: $' + formatNumber(game.tps);
-        }
-
-        function buy(i) {
-            const floor = game.floors[i];
-            const cost = Math.floor(floor.baseCost * Math.pow(floor.costMult, floor.count));
-            if (game.cash >= cost) {
-                game.cash -= cost;
-                floor.count++;
-                calcTps();
-                display();
+        // Buy shop item
+        function buyShopItem(index) {
+            const item = shopItems[index];
+            if (hits >= item.cost) {
+                hits -= item.cost;
+                item.owned++;
+                item.cost = Math.floor(item.cost * 1.15); // Cost increase
+                recalculateHPS();
+                updateDisplays();
                 saveGame();
             }
         }
 
-        function drawLeaf(x, y, color, scale = 1, rot = 0) {
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.scale(scale, scale);
-            ctx.rotate(rot);
-            ctx.fillStyle = color;
-            ctx.shadowColor = color;
-            ctx.shadowBlur = 10;
-            ctx.shadowOffsetX = 1;
-            ctx.shadowOffsetY = 1;
-            ctx.beginPath();
-            ctx.ellipse(0, 0, 7, 16, Math.PI / 6 + rot, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = '#228B22';
-            ctx.shadowBlur = 0;
-            ctx.fillRect(-1.5, 14, 3, 6);
-            ctx.restore();
+        // Render upgrades
+        function renderUpgrades() {
+            upgradesDiv.innerHTML = '';
+            upgrades.forEach((upgrade, index) => {
+                if (upgrade.purchased) return;
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                    <span>${upgrade.name} - ${upgrade.desc}<br>Cost: ${upgrade.cost} hits</span>
+                    <button class="buy-button" ${hits < upgrade.cost ? 'disabled' : ''}>Buy</button>
+                `;
+                div.querySelector('button').addEventListener('click', () => buyUpgrade(index));
+                upgradesDiv.appendChild(div);
+            });
         }
 
-        function updateVisuals(delta) {
-            const dt = delta / 16.67; // normalize to 60fps
-            workerPhases.forEach((_, i) => {
-                workerPhases[i] = (workerPhases[i] + 0.08 * dt) % (Math.PI * 2);
-            });
+        // Buy upgrade
+        function buyUpgrade(index) {
+            const upgrade = upgrades[index];
+            if (hits >= upgrade.cost && !upgrade.purchased) {
+                hits -= upgrade.cost;
+                upgrade.effect();
+                upgrade.purchased = true;
+                recalculateHPS();
+                updateDisplays();
+                saveGame();
+            }
+        }
 
-            // update products
-            products.forEach(p => {
-                p.y -= 200 * (delta / 1000);
-                p.phase += 0.4 * (delta / 1000);
-                p.opacity -= 0.8 * (delta / 1000);
+        // Render achievements
+        function renderAchievements() {
+            achievementsDiv.innerHTML = '';
+            achievements.forEach(ach => {
+                const div = document.createElement('div');
+                div.className = `achievement ${ach.unlocked ? '' : 'locked'}`;
+                div.innerHTML = `<span>${ach.name} - ${ach.desc}</span>`;
+                achievementsDiv.appendChild(div);
             });
-            products = products.filter(p => p.y > -40 && p.opacity > 0);
+        }
 
-            // emit products
-            game.floors.forEach((f, i) => {
-                const rate = f.count * 0.5 * (delta / 1000);
-                if (Math.random() < rate) {
-                    products.push({
-                        y: i * FLOOR_HEIGHT + 50 + (Math.random() * 20),
-                        x: 320 + (Math.random() - 0.5) * 60,
-                        scale: 0.6 + Math.random() * 0.5,
-                        opacity: 1,
-                        phase: Math.random() * Math.PI * 2,
-                        wobble: 12 + Math.random() * 8
+        // Check achievements
+        function checkAchievements() {
+            let updated = false;
+            achievements.forEach(ach => {
+                if (!ach.unlocked && ach.condition()) {
+                    ach.unlocked = true;
+                    updated = true;
+                }
+            });
+            if (updated) {
+                renderAchievements();
+                saveGame();
+            }
+        }
+
+        // Click event
+        clickButton.addEventListener('click', () => {
+            const gain = clickValue * prestigeBonus;
+            hits += gain;
+            totalHits += gain;
+            totalClicks++;
+            createParticles();
+            updateDisplays();
+            saveGame();
+        });
+
+        // Prestige
+        prestigeButton.addEventListener('click', () => {
+            const gain = Math.floor(Math.sqrt(totalHits / 1000));
+            if (gain > 0) {
+                if (confirm('Prestige will reset your hits, shop, and upgrades for permanent bonuses. Proceed?')) {
+                    prestigePoints += gain;
+                    prestigeBonus = 1 + (prestigePoints * 0.1);
+                    hits = 0;
+                    totalHits = 0;
+                    totalClicks = 0;
+                    hitsPerSecond = 0;
+                    clickValue = 1;
+                    shopItems.forEach(item => {
+                        item.owned = 0;
+                        item.cost = item.originalCost || item.cost; // Reset costs if needed
                     });
+                    upgrades.forEach(upgrade => upgrade.purchased = false);
+                    recalculateHPS();
+                    updateDisplays();
+                    saveGame();
                 }
-            });
-        }
-
-        function drawFarm() {
-            const time = Date.now() / 1000;
-            ctx.clearRect(0, 0, 640, 800);
-
-            // background gradient
-            const bgGrad = ctx.createLinearGradient(0, 0, 0, 800);
-            bgGrad.addColorStop(0, '#1a5a1a');
-            bgGrad.addColorStop(0.5, '#0f3f0f');
-            bgGrad.addColorStop(1, '#050a05');
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, 640, 800);
-
-            // side walls
-            ctx.fillStyle = '#8B4513';
-            ctx.fillRect(0, 0, 25, 800);
-            ctx.fillRect(615, 0, 25, 800);
-
-            // elevator shaft
-            ctx.fillStyle = 'rgba(139, 69, 19, 0.4)';
-            ctx.fillRect(280, 0, 80, 800);
-
-            // floor lines
-            ctx.strokeStyle = '#654321';
-            ctx.lineWidth = 4;
-            for (let i = 0; i <= NUM_FLOORS; i++) {
-                const y = i * FLOOR_HEIGHT;
-                ctx.beginPath();
-                ctx.moveTo(25, y);
-                ctx.lineTo(615, y);
-                ctx.stroke();
             }
+        });
 
-            // floors
-            game.floors.forEach((floor, i) => {
-                const y = i * FLOOR_HEIGHT;
-                const nextCost = Math.floor(floor.baseCost * Math.pow(floor.costMult, floor.count));
+        // Auto hits
+        setInterval(() => {
+            const gain = hitsPerSecond / 10; // 10 times per second for smooth
+            hits += gain;
+            totalHits += gain;
+            updateDisplays();
+        }, 100);
 
-                // label
-                ctx.fillStyle = floor.count > 0 ? '#FFF' : '#888';
-                ctx.font = 'bold 20px Arial';
-                ctx.textAlign = 'left';
-                ctx.textBaseline = 'top';
-                ctx.fillText(floor.name, 35, y + 15);
+        // Save every 30 seconds
+        setInterval(saveGame, 30000);
 
-                // cost top right
-                ctx.textAlign = 'right';
-                ctx.font = 'bold 18px Arial';
-                ctx.fillStyle = '#FFF';
-                ctx.fillText('$' + formatNumber(nextCost), 580, y + 18);
-
-                if (floor.count > 0) {
-                    // owned & prod
-                    ctx.font = 'bold 20px Arial';
-                    ctx.fillStyle = '#90EE90';
-                    ctx.textAlign = 'right';
-                    ctx.fillText(`x${floor.count}`, 580, y + 45);
-
-                    ctx.textAlign = 'left';
-                    ctx.font = '16px Arial';
-                    ctx.fillStyle = '#FFD700';
-                    ctx.fillText(`+$${formatNumber(floor.prod * floor.count)}/s`, 35, y + 48);
-
-                    // floor glow bg
-                    const fGrad = ctx.createRadialGradient(100 + i * 30, y + 40, 20, 320, y + 40, 150);
-                    fGrad.addColorStop(0, floor.color);
-                    fGrad.addColorStop(0.7, floor.color + '88');
-                    fGrad.addColorStop(1, '#000');
-                    ctx.fillStyle = fGrad;
-                    ctx.fillRect(30, y + 5, 580, 70);
-
-                    // plants
-                    const numPlants = Math.min(16, Math.floor(floor.count * 1.2) + 2);
-                    for (let p = 0; p < numPlants; p++) {
-                        let pxLeft = 45 + (p % 5) * 65 + Math.sin(time * 1.5 + p) * 8;
-                        let py = y + 28 + Math.sin(time * 2 + p * 1.2) * 7;
-                        let ps = 0.7 + Math.random() * 0.6;
-                        let prot = p * 0.4;
-                        drawLeaf(pxLeft, py, floor.color, ps, prot);
-
-                        if (p < 8) {
-                            let pxRight = 450 + (p % 4) * 45 + Math.sin(time * 1.8 + p + 10) * 6;
-                            drawLeaf(pxRight, py + 5, floor.color, ps * 0.9, -prot);
-                        }
-                    }
-
-                    // workers
-                    const numWorkers = Math.min(7, floor.count);
-                    const phase = workerPhases[i];
-                    for (let w = 0; w < numWorkers; w++) {
-                        const wx = 110 + (w / numWorkers) * 280 + Math.sin(phase + w * 1.2) * 28;
-                        const wy = y + 58;
-                        ctx.font = 'bold 30px Arial';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        ctx.fillStyle = '#FFD700';
-                        ctx.fillText('👨‍🌾', wx, wy);
-                    }
-                } else {
-                    // locked overlay
-                    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-                    ctx.fillRect(30, y + 5, 580, 70);
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = 'rgba(255,255,255,0.4)';
-                    ctx.font = 'bold 28px Arial';
-                    ctx.fillText('LOCKED', 320, y + 42);
-                }
-            });
-
-            // products
-            products.forEach(p => {
-                ctx.save();
-                ctx.globalAlpha = p.opacity;
-                ctx.font = `${Math.floor(18 * p.scale)}px Arial`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                const ex = p.x + Math.sin(p.phase) * p.wobble;
-                ctx.fillText('🍃', ex, p.y);
-                ctx.restore();
-            });
-
-            // buy buttons
-            buttonRects.length = 0;
-            game.floors.forEach((floor, i) => {
-                const y = i * FLOOR_HEIGHT + 32;
-                const btnX = 435;
-                const btnY = y;
-                const btnW = 170;
-                const btnH = 36;
-                const nextCost = Math.floor(floor.baseCost * Math.pow(floor.costMult, floor.count));
-                const canAfford = game.cash >= nextCost;
-
-                buttonRects[i] = {x: btnX, y: btnY, w: btnW, h: btnH};
-
-                // btn bg
-                const btnGrad = ctx.createLinearGradient(btnX, btnY, btnX + btnW, btnY + btnH);
-                btnGrad.addColorStop(0, canAfford ? '#FFD700' : '#555');
-                btnGrad.addColorStop(1, canAfford ? '#FFA500' : '#333');
-                ctx.fillStyle = btnGrad;
-                ctx.fillRect(btnX, btnY, btnW, btnH);
-
-                // border
-                ctx.strokeStyle = canAfford ? '#FF8C00' : '#777';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(btnX, btnY, btnW, btnH);
-
-                // text
-                ctx.fillStyle = '#000';
-                ctx.font = `bold ${floor.count === 0 ? 24 : 22}px Arial`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                const btnText = floor.count === 0 ? 'UNLOCK' : 'HIRE';
-                ctx.fillText(btnText, btnX + btnW / 2, btnY + btnH / 2);
-            });
-        }
-
-        function handleClick(e) {
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            const mx = (e.clientX - rect.left) * scaleX;
-            const my = (e.clientY - rect.top) * scaleY;
-
-            const fx = Math.floor(my / FLOOR_HEIGHT);
-            if (fx < 0 || fx >= NUM_FLOORS) return;
-
-            const btn = buttonRects[fx];
-            if (btn && mx >= btn.x && mx <= btn.x + btn.w && my >= btn.y && my <= btn.y + btn.h) {
-                buy(fx);
-                return;
-            }
-
-            const floor = game.floors[fx];
-            if (floor.count > 0) {
-                const boost = floor.prod * floor.count * 15; // 15s boost!
-                game.cash += boost;
-                // extra products burst
-                for (let k = 0; k < 8; k++) {
-                    products.push({
-                        y: fx * FLOOR_HEIGHT + 50 + Math.random() * 15,
-                        x: 320 + (Math.random() - 0.5) * 80,
-                        scale: 0.8 + Math.random() * 0.6,
-                        opacity: 1,
-                        phase: Math.random() * Math.PI * 2,
-                        wobble: 20
-                    });
-                }
-                display();
+        // Particles for clicks
+        function createParticles() {
+            const container = document.getElementById('particle-container');
+            const rect = clickButton.getBoundingClientRect();
+            for (let i = 0; i < 5; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = `${Math.random() * 10 + 5}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${rect.left + rect.width / 2 + (Math.random() * 20 - 10)}px`;
+                particle.style.top = `${rect.top + rect.height / 2}px`;
+                particle.style.animationDuration = `${Math.random() * 1 + 1}s`;
+                container.appendChild(particle);
+                setTimeout(() => particle.remove(), 2000);
             }
         }
 
-        function gameLoop() {
-            const now = Date.now();
-            const delta = (now - game.lastUpdate) / 1000;
-            game.lastUpdate = now;
-            if (game.tps > 0) {
-                game.cash += game.tps * delta;
-            }
-            calcTps();
-            display();
-        }
-
-        window.onload = function() {
-            canvas = document.getElementById('farmCanvas');
-            ctx = canvas.getContext('2d');
-            workerPhases = new Array(NUM_FLOORS).fill(0);
-            products = [];
-            buttonRects = [];
-
-            loadGame();
-            const diff = Math.min((Date.now() - game.lastUpdate) / 1000, 86400);
-            game.cash += game.tps * diff;
-            game.lastUpdate = Date.now();
-            calcTps();
-            display();
-
-            canvas.onclick = handleClick;
-
-            setInterval(gameLoop, 100);
-            setInterval(saveGame, 5000);
-
-            function animate(time) {
-                const delta = time - lastFrame || 16;
-                updateVisuals(delta);
-                drawFarm();
-                lastFrame = time;
-                requestAnimationFrame(animate);
-            }
-            requestAnimationFrame(animate);
-        };
+        // Initialize
+        loadGame();
+        updateDisplays();
+        shopItems.forEach(item => item.originalCost = item.cost); // Store original costs
     </script>
 </body>
 </html>
