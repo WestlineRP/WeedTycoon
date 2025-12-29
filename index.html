@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>420 Weed Smoking Clicker</title>
+    <title>Weed Farm Clicker</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #228B22; /* Forest green */
-            color: #FFFFFF;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA); /* Sky blue gradient for outdoor farm feel */
+            color: #333;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -16,130 +18,200 @@
             align-items: flex-start;
             min-height: 100vh;
             overflow-y: auto;
+            background-image: url('https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1055490/ss_02bd3d56836ab091f7fc6dd175d9782cb7b23322.1920x1080.jpg?t=1601838439');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .game-area {
-            flex: 1;
-            background-color: #006400; /* Dark green */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        }
-        .shop-area, .upgrades-area, .achievements-area, .stats-area, .prestige-area {
-            flex: 1;
-            background-color: #006400;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        }
-        h1, h2 {
-            text-align: center;
-            color: #32CD32; /* Lime green */
-        }
-        #clickButton {
-            display: block;
-            margin: 20px auto;
-            padding: 20px;
-            font-size: 24px;
-            background-color: #32CD32;
-            color: #000;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 150px;
-            height: 150px;
-            transition: transform 0.1s;
-        }
-        #clickButton:hover {
-            transform: scale(1.1);
-        }
-        #clickButton:active {
-            transform: scale(0.9);
-        }
-        .item {
-            background-color: #228B22;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .buy-button {
-            background-color: #32CD32;
-            color: #000;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .buy-button:disabled {
-            background-color: #A9A9A9;
-            cursor: not-allowed;
-        }
-        .achievement {
-            background-color: #228B22;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-        .locked {
-            opacity: 0.5;
-        }
-        .prestige-button {
-            background-color: #FFD700; /* Gold */
-            color: #000;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            width: 100%;
-            font-size: 18px;
-        }
-        .prestige-button:disabled {
-            background-color: #A9A9A9;
-            cursor: not-allowed;
-        }
-        #particle-container {
+        .overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: rgba(255, 255, 255, 0.4);
             pointer-events: none;
-            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 20px;
+        }
+        .game-area {
+            grid-column: 1 / 4;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .shop-area, .upgrades-area, .achievements-area {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        .stats-area, .prestige-area {
+            grid-column: span 1;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        .full-row {
+            grid-column: 1 / 4;
+        }
+        h1 {
+            font-size: 48px;
+            color: #228B22;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: #006400;
+            border-bottom: 2px solid #90EE90;
+            padding-bottom: 10px;
+        }
+        #clickButton {
+            background: url('https://www.clipartmax.com/png/middle/156-1563152_cannabis-icon-weed-leaf-outline-png.png') no-repeat center center;
+            background-size: contain;
+            width: 200px;
+            height: 200px;
+            border: 5px solid #228B22;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        #clickButton:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        #clickButton:active {
+            transform: scale(0.95);
+        }
+        .item {
+            background: #f0f8f0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .item:hover {
+            transform: translateY(-3px);
+        }
+        .buy-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .buy-button:hover {
+            background: #45a049;
+        }
+        .buy-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        .achievement {
+            background: #e8f5e9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .locked {
+            opacity: 0.6;
+            filter: grayscale(100%);
+        }
+        .prestige-button {
+            background: #FFD700;
+            color: #000;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        .prestige-button:hover {
+            background: #ffed4e;
+        }
+        .prestige-button:disabled {
+            background: #cccccc;
+        }
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
         }
         .particle {
             position: absolute;
-            background-color: #32CD32;
+            background: #4CAF50;
             border-radius: 50%;
             opacity: 0.8;
-            animation: float 2s ease-in-out infinite;
+            animation: float 3s ease-out forwards;
         }
         @keyframes float {
-            0% { transform: translateY(0); opacity: 0.8; }
-            100% { transform: translateY(-50px); opacity: 0; }
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-200px) scale(0); opacity: 0; }
+        }
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .game-area, .full-row {
+                grid-column: 1 / 3;
+            }
+            .stats-area, .prestige-area {
+                grid-column: span 2;
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .game-area, .shop-area, .upgrades-area, .achievements-area, .stats-area, .prestige-area {
+                grid-column: 1 / 2;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="overlay"></div>
     <div id="particle-container"></div>
     <div class="container">
         <div class="game-area">
-            <h1>420 Weed Smoking Clicker</h1>
-            <p id="hitsDisplay">Hits: 0</p>
-            <p id="hpsDisplay">Hits per second: 0</p>
-            <button id="clickButton">Take a Hit! 🌿</button>
+            <h1>Weed Farm Clicker</h1>
+            <p id="hitsDisplay">Buds: 0</p>
+            <p id="hpsDisplay">Buds per second: 0</p>
+            <button id="clickButton" title="Harvest Bud!"></button>
         </div>
         
         <div class="shop-area">
-            <h2>Shop</h2>
+            <h2>Farm Shop</h2>
             <div id="shopItems"></div>
         </div>
         
@@ -153,289 +225,265 @@
             <div id="achievements"></div>
         </div>
         
-        <div class="stats-area">
+        <div class="stats-area full-row">
             <h2>Stats</h2>
-            <p id="totalHits">Total Hits: 0</p>
+            <p id="totalHits">Total Buds Harvested: 0</p>
             <p id="totalClicks">Total Clicks: 0</p>
             <p id="prestigePoints">Prestige Points: 0</p>
-            <p id="prestigeBonus">Prestige Bonus: 0%</p>
+            <p id="prestigeBonus">Prestige Bonus: +0%</p>
         </div>
         
         <div class="prestige-area">
             <h2>Prestige</h2>
-            <p>Reset progress for permanent bonuses!</p>
-            <p id="prestigeGain">Next Prestige: 0 points</p>
+            <p>Reset your farm for permanent growth bonuses!</p>
+            <p id="prestigeGain">Potential Gain: 0 points</p>
             <button id="prestigeButton" class="prestige-button" disabled>Prestige Now</button>
         </div>
     </div>
 
     <script>
-        let hits = 0;
-        let hitsPerSecond = 0;
+        let buds = 0;
+        let budsPerSecond = 0;
         let clickValue = 1;
-        let totalHits = 0;
+        let totalBuds = 0;
         let totalClicks = 0;
         let prestigePoints = 0;
-        let prestigeBonus = 1; // Multiplier from prestige
+        let prestigeMultiplier = 1;
 
-        // Shop items (auto-producers)
         const shopItems = [
-            { name: 'Joint Roller', cost: 10, hps: 0.1, owned: 0, desc: 'Rolls joints automatically.' },
-            { name: 'Bong', cost: 50, hps: 0.5, owned: 0, desc: 'Smooth hits every second.' },
-            { name: 'Vape Pen', cost: 200, hps: 2, owned: 0, desc: 'Discreet auto-vaping.' },
-            { name: 'Grow Tent', cost: 1000, hps: 10, owned: 0, desc: 'Grows your own supply.' },
-            { name: 'Dispensary', cost: 5000, hps: 50, owned: 0, desc: 'Unlimited access.' },
-            { name: 'Weed Farm', cost: 20000, hps: 200, owned: 0, desc: 'Industrial scale.' },
-            { name: 'THC Lab', cost: 100000, hps: 1000, owned: 0, desc: 'Synthesizes pure THC.' },
-            { name: 'Cannabis Empire', cost: 500000, hps: 5000, owned: 0, desc: 'Global domination.' }
+            { name: 'Seed Planter', cost: 15, bps: 0.1, owned: 0, desc: 'Plants seeds automatically.' },
+            { name: 'Watering System', cost: 100, bps: 1, owned: 0, desc: 'Keeps plants hydrated.' },
+            { name: 'Grow Lights', cost: 500, bps: 5, owned: 0, desc: 'Accelerates growth.' },
+            { name: 'Greenhouse', cost: 3000, bps: 30, owned: 0, desc: 'Controlled environment.' },
+            { name: 'Hydroponic Setup', cost: 15000, bps: 150, owned: 0, desc: 'Soil-less farming.' },
+            { name: 'Outdoor Field', cost: 100000, bps: 1000, owned: 0, desc: 'Massive scale planting.' },
+            { name: 'Automated Harvester', cost: 500000, bps: 5000, owned: 0, desc: 'Mechanical harvesting.' },
+            { name: 'Cannabis Empire', cost: 2000000, bps: 20000, owned: 0, desc: 'Global farm network.' }
         ];
 
-        // Upgrades (multipliers and bonuses)
         const upgrades = [
-            { name: 'Better Strain', cost: 100, effect: () => clickValue *= 2, desc: 'Doubles click value.', purchased: false },
-            { name: 'Auto Inhaler', cost: 500, effect: () => hitsPerSecond *= 1.5, desc: 'Boosts HPS by 50%.', purchased: false },
-            { name: 'Golden Lighter', cost: 2000, effect: () => clickValue *= 3, desc: 'Triples click value.', purchased: false },
-            { name: 'Hydroponics', cost: 10000, effect: () => { shopItems.forEach(item => item.hps *= 1.2); recalculateHPS(); }, desc: '20% boost to all producers.', purchased: false },
-            { name: 'Edibles Infusion', cost: 50000, effect: () => clickValue += hitsPerSecond * 0.1, desc: 'Clicks gain 10% of HPS.', purchased: false },
-            { name: 'CBD Synergy', cost: 200000, effect: () => hitsPerSecond *= 2, desc: 'Doubles HPS.', purchased: false }
+            { name: 'Better Seeds', cost: 200, effect: () => clickValue *= 2, desc: 'Doubles harvest per click.', purchased: false },
+            { name: 'Fertilizer', cost: 1000, effect: () => budsPerSecond *= 1.5, desc: '50% boost to production.', purchased: false },
+            { name: 'Premium Strain', cost: 5000, effect: () => clickValue *= 3, desc: 'Triples click harvest.', purchased: false },
+            { name: 'Advanced Hydro', cost: 25000, effect: () => { shopItems.forEach(i => i.bps *= 1.2); recalculateBPS(); }, desc: '20% boost to all producers.', purchased: false },
+            { name: 'Trimming Bots', cost: 100000, effect: () => clickValue += budsPerSecond * 0.2, desc: 'Clicks gain 20% of BPS.', purchased: false },
+            { name: 'Genetic Engineering', cost: 500000, effect: () => budsPerSecond *= 2, desc: 'Doubles all production.', purchased: false }
         ];
 
-        // Achievements
         const achievements = [
-            { name: 'First Puff', desc: 'Take your first hit.', unlocked: false, condition: () => totalClicks >= 1 },
-            { name: 'Stoner', desc: 'Reach 100 hits.', unlocked: false, condition: () => totalHits >= 100 },
-            { name: 'High Roller', desc: 'Own 10 Joint Rollers.', unlocked: false, condition: () => shopItems[0].owned >= 10 },
-            { name: 'Baked', desc: 'Reach 1,000 hits.', unlocked: false, condition: () => totalHits >= 1000 },
-            { name: 'Empire Builder', desc: 'Own a Cannabis Empire.', unlocked: false, condition: () => shopItems[7].owned >= 1 },
-            { name: 'Prestige Master', desc: 'Prestige once.', unlocked: false, condition: () => prestigePoints >= 1 },
-            { name: 'Click Maniac', desc: 'Click 420 times.', unlocked: false, condition: () => totalClicks >= 420 },
-            { name: 'Auto High', desc: 'Reach 420 HPS.', unlocked: false, condition: () => hitsPerSecond >= 420 }
+            { name: 'First Harvest', desc: 'Harvest your first bud.', unlocked: false, condition: () => totalClicks >= 1 },
+            { name: 'Bud Beginner', desc: 'Reach 420 buds.', unlocked: false, condition: () => totalBuds >= 420 },
+            { name: 'Planter Pro', desc: 'Own 20 Seed Planters.', unlocked: false, condition: () => shopItems[0].owned >= 20 },
+            { name: 'Green Thumb', desc: 'Reach 10,000 buds.', unlocked: false, condition: () => totalBuds >= 10000 },
+            { name: 'Farm Tycoon', desc: 'Own a Cannabis Empire.', unlocked: false, condition: () => shopItems[7].owned >= 1 },
+            { name: 'Prestigious Farmer', desc: 'Prestige once.', unlocked: false, condition: () => prestigePoints >= 1 },
+            { name: 'Click Master', desc: 'Click 1000 times.', unlocked: false, condition: () => totalClicks >= 1000 },
+            { name: 'Idle Farmer', desc: 'Reach 420 BPS.', unlocked: false, condition: () => budsPerSecond >= 420 }
         ];
 
-        // DOM elements
-        const hitsDisplay = document.getElementById('hitsDisplay');
-        const hpsDisplay = document.getElementById('hpsDisplay');
+        // DOM
+        const budsDisplay = document.getElementById('hitsDisplay');
+        const bpsDisplay = document.getElementById('hpsDisplay');
         const clickButton = document.getElementById('clickButton');
-        const shopItemsDiv = document.getElementById('shopItems');
+        const shopDiv = document.getElementById('shopItems');
         const upgradesDiv = document.getElementById('upgrades');
-        const achievementsDiv = document.getElementById('achievements');
-        const totalHitsP = document.getElementById('totalHits');
+        const achDiv = document.getElementById('achievements');
+        const totalBudsP = document.getElementById('totalHits');
         const totalClicksP = document.getElementById('totalClicks');
         const prestigePointsP = document.getElementById('prestigePoints');
         const prestigeBonusP = document.getElementById('prestigeBonus');
         const prestigeGainP = document.getElementById('prestigeGain');
-        const prestigeButton = document.getElementById('prestigeButton');
+        const prestigeBtn = document.getElementById('prestigeButton');
 
-        // Load game state if available
         function loadGame() {
-            const saved = localStorage.getItem('weedClickerSave');
+            const saved = localStorage.getItem('weedFarmClickerSave');
             if (saved) {
                 const data = JSON.parse(saved);
-                hits = data.hits || 0;
-                hitsPerSecond = data.hps || 0;
+                buds = data.buds || 0;
+                budsPerSecond = data.bps || 0;
                 clickValue = data.clickValue || 1;
-                totalHits = data.totalHits || 0;
+                totalBuds = data.totalBuds || 0;
                 totalClicks = data.totalClicks || 0;
                 prestigePoints = data.prestigePoints || 0;
-                prestigeBonus = 1 + (prestigePoints * 0.1); // 10% bonus per point
+                prestigeMultiplier = 1 + prestigePoints * 0.1;
                 shopItems.forEach((item, i) => {
-                    item.owned = data.shop[i]?.owned || 0;
-                    item.cost = data.shop[i]?.cost || item.cost;
+                    if (data.shop && data.shop[i]) {
+                        item.owned = data.shop[i].owned;
+                        item.cost = data.shop[i].cost;
+                    }
                 });
-                upgrades.forEach((upgrade, i) => upgrade.purchased = data.upgrades[i] || false);
-                achievements.forEach((ach, i) => ach.unlocked = data.achievements[i] || false);
-                recalculateHPS();
+                upgrades.forEach((u, i) => u.purchased = data.upgrades ? data.upgrades[i] : false);
+                achievements.forEach((a, i) => a.unlocked = data.achievements ? data.achievements[i] : false);
+                recalculateBPS();
             }
         }
 
-        // Save game state
         function saveGame() {
             const data = {
-                hits,
-                hps: hitsPerSecond,
-                clickValue,
-                totalHits,
-                totalClicks,
-                prestigePoints,
-                shop: shopItems.map(item => ({ owned: item.owned, cost: item.cost })),
-                upgrades: upgrades.map(upgrade => upgrade.purchased),
-                achievements: achievements.map(ach => ach.unlocked)
+                buds, bps: budsPerSecond, clickValue, totalBuds, totalClicks, prestigePoints,
+                shop: shopItems.map(i => ({owned: i.owned, cost: i.cost})),
+                upgrades: upgrades.map(u => u.purchased),
+                achievements: achievements.map(a => a.unlocked)
             };
-            localStorage.setItem('weedClickerSave', JSON.stringify(data));
+            localStorage.setItem('weedFarmClickerSave', JSON.stringify(data));
         }
 
-        // Recalculate HPS
-        function recalculateHPS() {
-            hitsPerSecond = shopItems.reduce((total, item) => total + (item.hps * item.owned), 0) * prestigeBonus;
-            hpsDisplay.textContent = `Hits per second: ${hitsPerSecond.toFixed(1)}`;
+        function recalculateBPS() {
+            budsPerSecond = shopItems.reduce((sum, item) => sum + item.bps * item.owned, 0) * prestigeMultiplier;
+            bpsDisplay.textContent = `Buds per second: ${budsPerSecond.toFixed(1)}`;
         }
 
-        // Update displays
         function updateDisplays() {
-            hitsDisplay.textContent = `Hits: ${Math.floor(hits)}`;
-            totalHitsP.textContent = `Total Hits: ${Math.floor(totalHits)}`;
+            budsDisplay.textContent = `Buds: ${Math.floor(buds)}`;
+            totalBudsP.textContent = `Total Buds Harvested: ${Math.floor(totalBuds)}`;
             totalClicksP.textContent = `Total Clicks: ${totalClicks}`;
             prestigePointsP.textContent = `Prestige Points: ${prestigePoints}`;
-            prestigeBonusP.textContent = `Prestige Bonus: ${(prestigeBonus - 1) * 100}%`;
-            const potentialPrestige = Math.floor(Math.sqrt(totalHits / 1000));
-            prestigeGainP.textContent = `Next Prestige: ${potentialPrestige} points`;
-            prestigeButton.disabled = potentialPrestige === 0;
+            prestigeBonusP.textContent = `Prestige Bonus: +${(prestigeMultiplier - 1) * 100}%`;
+            const gain = Math.floor(Math.sqrt(totalBuds / 5000));
+            prestigeGainP.textContent = `Potential Gain: ${gain} points`;
+            prestigeBtn.disabled = gain <= 0;
             renderShop();
             renderUpgrades();
             renderAchievements();
             checkAchievements();
         }
 
-        // Render shop items
         function renderShop() {
-            shopItemsDiv.innerHTML = '';
-            shopItems.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = 'item';
-                div.innerHTML = `
-                    <span>${item.name} (${item.owned}) - ${item.desc}<br>Cost: ${Math.floor(item.cost)} hits - +${item.hps} HPS</span>
-                    <button class="buy-button" ${hits < item.cost ? 'disabled' : ''}>Buy</button>
+            shopDiv.innerHTML = '';
+            shopItems.forEach((item, idx) => {
+                const el = document.createElement('div');
+                el.className = 'item';
+                el.innerHTML = `
+                    <div>
+                        <strong>${item.name} (${item.owned})</strong><br>
+                        ${item.desc}<br>
+                        Cost: ${Math.floor(item.cost)} buds | +${item.bps} BPS
+                    </div>
+                    <button class="buy-button" ${buds < item.cost ? 'disabled' : ''}>Buy</button>
                 `;
-                div.querySelector('button').addEventListener('click', () => buyShopItem(index));
-                shopItemsDiv.appendChild(div);
+                el.querySelector('button').onclick = () => buyItem(idx);
+                shopDiv.appendChild(el);
             });
         }
 
-        // Buy shop item
-        function buyShopItem(index) {
-            const item = shopItems[index];
-            if (hits >= item.cost) {
-                hits -= item.cost;
+        function buyItem(idx) {
+            const item = shopItems[idx];
+            if (buds >= item.cost) {
+                buds -= item.cost;
                 item.owned++;
-                item.cost = Math.floor(item.cost * 1.15); // Cost increase
-                recalculateHPS();
+                item.cost = Math.floor(item.cost * 1.15);
+                recalculateBPS();
                 updateDisplays();
                 saveGame();
             }
         }
 
-        // Render upgrades
         function renderUpgrades() {
             upgradesDiv.innerHTML = '';
-            upgrades.forEach((upgrade, index) => {
-                if (upgrade.purchased) return;
-                const div = document.createElement('div');
-                div.className = 'item';
-                div.innerHTML = `
-                    <span>${upgrade.name} - ${upgrade.desc}<br>Cost: ${upgrade.cost} hits</span>
-                    <button class="buy-button" ${hits < upgrade.cost ? 'disabled' : ''}>Buy</button>
+            upgrades.filter(u => !u.purchased).forEach((u, idx) => {
+                const el = document.createElement('div');
+                el.className = 'item';
+                el.innerHTML = `
+                    <div>
+                        <strong>${u.name}</strong><br>
+                        ${u.desc}<br>
+                        Cost: ${u.cost} buds
+                    </div>
+                    <button class="buy-button" ${buds < u.cost ? 'disabled' : ''}>Buy</button>
                 `;
-                div.querySelector('button').addEventListener('click', () => buyUpgrade(index));
-                upgradesDiv.appendChild(div);
+                el.querySelector('button').onclick = () => buyUpgrade(idx);
+                upgradesDiv.appendChild(el);
             });
         }
 
-        // Buy upgrade
-        function buyUpgrade(index) {
-            const upgrade = upgrades[index];
-            if (hits >= upgrade.cost && !upgrade.purchased) {
-                hits -= upgrade.cost;
-                upgrade.effect();
-                upgrade.purchased = true;
-                recalculateHPS();
+        function buyUpgrade(idx) {
+            const u = upgrades[idx];
+            if (buds >= u.cost && !u.purchased) {
+                buds -= u.cost;
+                u.effect();
+                u.purchased = true;
+                recalculateBPS();
                 updateDisplays();
                 saveGame();
             }
         }
 
-        // Render achievements
         function renderAchievements() {
-            achievementsDiv.innerHTML = '';
-            achievements.forEach(ach => {
-                const div = document.createElement('div');
-                div.className = `achievement ${ach.unlocked ? '' : 'locked'}`;
-                div.innerHTML = `<span>${ach.name} - ${ach.desc}</span>`;
-                achievementsDiv.appendChild(div);
+            achDiv.innerHTML = '';
+            achievements.forEach(a => {
+                const el = document.createElement('div');
+                el.className = `achievement ${a.unlocked ? '' : 'locked'}`;
+                el.innerHTML = `<strong>${a.name}</strong><br>${a.desc}`;
+                achDiv.appendChild(el);
             });
         }
 
-        // Check achievements
         function checkAchievements() {
-            let updated = false;
-            achievements.forEach(ach => {
-                if (!ach.unlocked && ach.condition()) {
-                    ach.unlocked = true;
-                    updated = true;
-                }
+            achievements.forEach(a => {
+                if (!a.unlocked && a.condition()) a.unlocked = true;
             });
-            if (updated) {
-                renderAchievements();
-                saveGame();
-            }
+            if (achievements.some(a => a.unlocked && renderAchievements)) renderAchievements();
         }
 
-        // Click event
         clickButton.addEventListener('click', () => {
-            const gain = clickValue * prestigeBonus;
-            hits += gain;
-            totalHits += gain;
+            const gain = clickValue * prestigeMultiplier;
+            buds += gain;
+            totalBuds += gain;
             totalClicks++;
             createParticles();
             updateDisplays();
             saveGame();
         });
 
-        // Prestige
-        prestigeButton.addEventListener('click', () => {
-            const gain = Math.floor(Math.sqrt(totalHits / 1000));
-            if (gain > 0) {
-                if (confirm('Prestige will reset your hits, shop, and upgrades for permanent bonuses. Proceed?')) {
-                    prestigePoints += gain;
-                    prestigeBonus = 1 + (prestigePoints * 0.1);
-                    hits = 0;
-                    totalHits = 0;
-                    totalClicks = 0;
-                    hitsPerSecond = 0;
-                    clickValue = 1;
-                    shopItems.forEach(item => {
-                        item.owned = 0;
-                        item.cost = item.originalCost || item.cost; // Reset costs if needed
-                    });
-                    upgrades.forEach(upgrade => upgrade.purchased = false);
-                    recalculateHPS();
-                    updateDisplays();
-                    saveGame();
-                }
+        prestigeBtn.addEventListener('click', () => {
+            const gain = Math.floor(Math.sqrt(totalBuds / 5000));
+            if (gain > 0 && confirm('Prestige? This will reset everything for permanent bonuses!')) {
+                prestigePoints += gain;
+                prestigeMultiplier = 1 + prestigePoints * 0.1;
+                buds = 0;
+                totalBuds = 0;
+                totalClicks = 0;
+                budsPerSecond = 0;
+                clickValue = 1;
+                shopItems.forEach(i => { i.owned = 0; i.cost = i.originalCost || i.cost; });
+                upgrades.forEach(u => u.purchased = false);
+                recalculateBPS();
+                updateDisplays();
+                saveGame();
             }
         });
 
-        // Auto hits
         setInterval(() => {
-            const gain = hitsPerSecond / 10; // 10 times per second for smooth
-            hits += gain;
-            totalHits += gain;
-            updateDisplays();
+            if (budsPerSecond > 0) {
+                const gain = budsPerSecond / 10;
+                buds += gain;
+                totalBuds += gain;
+                updateDisplays();
+            }
         }, 100);
 
-        // Save every 30 seconds
         setInterval(saveGame, 30000);
 
-        // Particles for clicks
         function createParticles() {
             const container = document.getElementById('particle-container');
             const rect = clickButton.getBoundingClientRect();
-            for (let i = 0; i < 5; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.width = `${Math.random() * 10 + 5}px`;
-                particle.style.height = particle.style.width;
-                particle.style.left = `${rect.left + rect.width / 2 + (Math.random() * 20 - 10)}px`;
-                particle.style.top = `${rect.top + rect.height / 2}px`;
-                particle.style.animationDuration = `${Math.random() * 1 + 1}s`;
-                container.appendChild(particle);
-                setTimeout(() => particle.remove(), 2000);
+            for (let i = 0; i < 8; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.width = `${Math.random() * 15 + 10}px`;
+                p.style.height = p.style.width;
+                p.style.left = `${rect.left + rect.width / 2 + (Math.random() * 60 - 30)}px`;
+                p.style.top = `${rect.top + rect.height / 2}px`;
+                p.style.background = `hsl(${100 + Math.random() * 40}, 70%, 50%)`;
+                container.appendChild(p);
+                setTimeout(() => p.remove(), 3000);
             }
         }
 
-        // Initialize
+        // Init
+        shopItems.forEach(i => i.originalCost = i.cost);
         loadGame();
         updateDisplays();
-        shopItems.forEach(item => item.originalCost = item.cost); // Store original costs
     </script>
 </body>
 </html>
