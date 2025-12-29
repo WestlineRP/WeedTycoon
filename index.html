@@ -41,35 +41,41 @@
             height: 100vh;
             display: flex;
         }
-        /* Sidebar - smaller */
+        /* Sidebar with text pills */
         .sidebar {
-            width: 80px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 0 25px 25px 0;
+            width: 140px;
+            background: rgba(255, 255, 255, 0.95);
             box-shadow: 8px 0 25px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px 0;
-            gap: 25px;
+            justify-content: center;
+            padding: 20px 0;
+            gap: 20px;
         }
         .menu-btn {
-            width: 60px;
+            width: 120px;
             height: 60px;
-            background: #32cd32;
-            border-radius: 50%;
+            background: #f0f8f0;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             transition: transform 0.2s, background 0.3s;
-            background-size: 70%;
-            background-repeat: no-repeat;
-            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #228b22;
         }
         .menu-btn:hover {
-            transform: scale(1.2);
-            background-color: #228b22;
+            transform: scale(1.1);
+            background: #e0ffe0;
         }
-        /* Main game area - more compact */
+        .menu-btn:active {
+            transform: scale(0.98);
+        }
+        /* Main game area */
         .game-area {
             flex: 1;
             display: flex;
@@ -94,10 +100,10 @@
             font-size: 20px;
         }
         #clickButton {
-            background: url('https://img.freepik.com/premium-photo/cartoon-marijuana-leaf-with-smiling-face-weed_1124848-125192.jpg') no-repeat center center;
+            background: url('https://png.pngtree.com/background/20250715/original/pngtree-adorable-smiling-weed-leaf-with-pastel-background-picture-image_16711452.jpg') no-repeat center center;
             background-size: contain;
-            width: 220px;
-            height: 220px;
+            width: 250px;
+            height: 250px;
             border: 8px solid #7fff00;
             border-radius: 50%;
             cursor: pointer;
@@ -110,7 +116,7 @@
         #clickButton:active {
             transform: scale(0.95);
         }
-        /* Modals - smaller and tighter */
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -194,13 +200,12 @@
             0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.9; }
             100% { transform: translateY(-250px) rotate(360deg) scale(0); opacity: 0; }
         }
-        /* Better mobile */
         @media (max-width: 768px) {
             .main-container { flex-direction: column; }
-            .sidebar { width: 100%; height: 80px; border-radius: 0 0 25px 25px; flex-direction: row; padding: 10px 0; }
-            #clickButton { width: 180px; height: 180px; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; flex-wrap: wrap; justify-content: center; padding: 10px; gap: 10px; }
+            .menu-btn { width: 100px; height: 50px; font-size: 16px; }
+            #clickButton { width: 200px; height: 200px; }
             h1 { font-size: 40px; }
-            .top-stats { font-size: 18px; padding: 8px 15px; }
         }
     </style>
 </head>
@@ -209,13 +214,13 @@
     <div id="particle-container"></div>
 
     <div class="main-container">
-        <!-- Sidebar Menu -->
+        <!-- Sidebar with text buttons -->
         <div class="sidebar">
-            <div class="menu-btn" id="shopBtn" style="background-image: url('https://img.freepik.com/premium-vector/you-win-shop-menu-pop-up-with-cute-cat-magnet-bomb-game-icons_98054-171.jpg');" title="Shop"></div>
-            <div class="menu-btn" id="upgradesBtn" style="background-image: url('https://static.vecteezy.com/system/resources/previews/012/177/827/non_2x/cute-cartoon-arrow-icon-set-free-vector.jpg');" title="Upgrades"></div>
-            <div class="menu-btn" id="achBtn" style="background-image: url('https://thumbs.dreamstime.com/b/victory-smiles-cartoon-trophy-cup-happy-face-award-achievement-success-icon-339060947.jpg');" title="Achievements"></div>
-            <div class="menu-btn" id="statsBtn" style="background-image: url('https://img.freepik.com/premium-vector/increase-money-growth-statistics-chart-concept-yellow-realistic-3d-cute-cartoon-style-white-transparent-background_369481-1480.jpg');" title="Stats"></div>
-            <div class="menu-btn" id="prestigeBtnMenu" style="background-image: url('https://www.shutterstock.com/image-vector/star-reward-coin-icon-vector-260nw-2626847619.jpg');" title="Prestige"></div>
+            <div class="menu-btn" id="shopBtn">Shop</div>
+            <div class="menu-btn" id="upgradesBtn">Upgrades</div>
+            <div class="menu-btn" id="achBtn">Achievements</div>
+            <div class="menu-btn" id="statsBtn">Stats</div>
+            <div class="menu-btn" id="prestigeBtnMenu">Prestige</div>
         </div>
 
         <!-- Main Game Area -->
@@ -229,7 +234,7 @@
         </div>
     </div>
 
-    <!-- Modals (same as before) -->
+    <!-- Modals -->
     <div id="shopModal" class="modal">
         <div class="modal-content">
             <button class="close-btn">&times;</button>
@@ -276,7 +281,7 @@
     </div>
 
     <script>
-        // Game logic remains exactly the same as the previous version (stable and fixed)
+        // Game logic (unchanged)
         let buds = 0;
         let budsPerSecond = 0;
         let clickValue = 1;
