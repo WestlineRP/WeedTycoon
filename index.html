@@ -110,19 +110,28 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 20px; /* Adds space so button is easier to click */
+        }
+        .item-text {
+            flex: 1;
         }
         .buy-button {
             background: #4CAF50;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             cursor: pointer;
             border-radius: 8px;
             font-weight: bold;
-            transition: background 0.3s;
+            font-size: 16px;
+            min-width: 100px;
+            transition: background 0.3s, transform 0.1s;
         }
         .buy-button:hover {
             background: #45a049;
+        }
+        .buy-button:active {
+            transform: scale(0.95);
         }
         .buy-button:disabled {
             background: #cccccc;
@@ -197,6 +206,13 @@
             }
             .game-area, .shop-area, .upgrades-area, .achievements-area, .stats-area, .prestige-area {
                 grid-column: 1 / 2;
+            }
+            .item-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .buy-button {
+                align-self: flex-end;
             }
         }
     </style>
@@ -357,7 +373,7 @@
                 container.className = 'item-container';
                 container.innerHTML = `
                     <div class="item-content">
-                        <div>
+                        <div class="item-text">
                             <strong>${item.name} (${item.owned})</strong><br>
                             ${item.desc}<br>
                             Cost: ${Math.floor(item.cost)} buds | +${item.bps} BPS
@@ -365,7 +381,8 @@
                         <button class="buy-button" ${buds < item.cost ? 'disabled' : ''}>Buy</button>
                     </div>
                 `;
-                container.querySelector('button').onclick = () => buyItem(idx);
+                const button = container.querySelector('button');
+                button.addEventListener('click', () => buyItem(idx));
                 shopDiv.appendChild(container);
             });
         }
@@ -378,7 +395,7 @@
                 container.className = 'item-container';
                 container.innerHTML = `
                     <div class="item-content">
-                        <div>
+                        <div class="item-text">
                             <strong>${u.name}</strong><br>
                             ${u.desc}<br>
                             Cost: ${u.cost} buds
@@ -386,7 +403,8 @@
                         <button class="buy-button" ${buds < u.cost ? 'disabled' : ''}>Buy</button>
                     </div>
                 `;
-                container.querySelector('button').onclick = () => buyUpgrade(idx);
+                const button = container.querySelector('button');
+                button.addEventListener('click', () => buyUpgrade(idx));
                 upgradesDiv.appendChild(container);
             });
         }
