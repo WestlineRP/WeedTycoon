@@ -9,7 +9,7 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to bottom, #87CEEB, #E0F7FA); /* Sky blue gradient for outdoor farm feel */
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
             color: #333;
             margin: 0;
             padding: 20px;
@@ -95,7 +95,7 @@
         #clickButton:active {
             transform: scale(0.95);
         }
-        .item {
+        .item.available {
             background: #f0f8f0;
             padding: 15px;
             margin: 10px 0;
@@ -106,7 +106,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             transition: transform 0.2s;
         }
-        .item:hover {
+        .item.available:hover {
             transform: translateY(-3px);
         }
         .buy-button {
@@ -352,7 +352,7 @@
             shopDiv.innerHTML = '';
             shopItems.forEach((item, idx) => {
                 const el = document.createElement('div');
-                el.className = 'item';
+                el.className = 'item available';
                 el.innerHTML = `
                     <div>
                         <strong>${item.name} (${item.owned})</strong><br>
@@ -366,23 +366,12 @@
             });
         }
 
-        function buyItem(idx) {
-            const item = shopItems[idx];
-            if (buds >= item.cost) {
-                buds -= item.cost;
-                item.owned++;
-                item.cost = Math.floor(item.cost * 1.15);
-                recalculateBPS();
-                updateDisplays();
-                saveGame();
-            }
-        }
-
         function renderUpgrades() {
             upgradesDiv.innerHTML = '';
-            upgrades.filter(u => !u.purchased).forEach((u, idx) => {
+            upgrades.forEach((u, idx) => {
+                if (u.purchased) return;
                 const el = document.createElement('div');
-                el.className = 'item';
+                el.className = 'item available';
                 el.innerHTML = `
                     <div>
                         <strong>${u.name}</strong><br>
@@ -394,6 +383,18 @@
                 el.querySelector('button').onclick = () => buyUpgrade(idx);
                 upgradesDiv.appendChild(el);
             });
+        }
+
+        function buyItem(idx) {
+            const item = shopItems[idx];
+            if (buds >= item.cost) {
+                buds -= item.cost;
+                item.owned++;
+                item.cost = Math.floor(item.cost * 1.15);
+                recalculateBPS();
+                updateDisplays();
+                saveGame();
+            }
         }
 
         function buyUpgrade(idx) {
@@ -419,10 +420,14 @@
         }
 
         function checkAchievements() {
+            let updated = false;
             achievements.forEach(a => {
-                if (!a.unlocked && a.condition()) a.unlocked = true;
+                if (!a.unlocked && a.condition()) {
+                    a.unlocked = true;
+                    updated = true;
+                }
             });
-            if (achievements.some(a => a.unlocked && renderAchievements)) renderAchievements();
+            if (updated) renderAchievements();
         }
 
         clickButton.addEventListener('click', () => {
