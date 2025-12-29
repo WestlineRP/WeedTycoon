@@ -11,89 +11,138 @@
             background: #a8e6cf;
             color: #333;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            padding: 0;
             min-height: 100vh;
-            overflow-y: auto;
-            background-image: url('https://www.shutterstock.com/image-photo/vectorized-cartoon-illustration-cannabis-field-260nw-2610556367.jpg');
+            background-image: url('https://img.freepik.com/premium-photo/cannabis-bushes-cartoon-illustration-marijuana-back_999671-3579.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.5);
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.4);
             pointer-events: none;
-        }
-        .container {
-            position: relative;
             z-index: 1;
-            max-width: 1400px;
+        }
+        #particle-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .main-container {
+            position: relative;
+            z-index: 3;
             width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: auto auto;
-            gap: 20px;
+            max-width: 1200px;
+            height: 100vh;
+            display: flex;
         }
+        /* Sidebar */
+        .sidebar {
+            width: 100px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0 30px 30px 0;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            gap: 30px;
+        }
+        .menu-btn {
+            width: 70px;
+            height: 70px;
+            background: #32cd32;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s, background 0.3s;
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .menu-btn:hover {
+            transform: scale(1.15);
+            background-color: #228b22;
+        }
+        /* Main game area */
         .game-area {
-            grid-column: 1 / 4;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-        }
-        .shop-area, .upgrades-area, .achievements-area {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 25px;
-            border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-        .stats-area, .prestige-area {
-            grid-column: span 1;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 25px;
-            border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-        .full-row {
-            grid-column: 1 / 4;
         }
         h1 {
             font-size: 60px;
             color: #2e8b57;
-            margin-bottom: 10px;
+            margin: 0 0 20px;
             text-shadow: 4px 4px 8px rgba(0,0,0,0.2);
         }
-        h2 {
-            color: #228b22;
-            border-bottom: 4px dotted #90ee90;
-            padding-bottom: 10px;
-            font-size: 32px;
+        .top-stats {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 30px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            font-size: 24px;
         }
         #clickButton {
-            background: url('https://static.vecteezy.com/system/resources/thumbnails/067/115/517/small_2x/weed-or-cannabis-mascot-cartoon-character-logo-template-vector.jpg') no-repeat center center;
+            background: url('https://static.vecteezy.com/system/resources/thumbnails/056/017/691/small/grin-marijuana-leaf-cartoon-photo.jpg') no-repeat center center;
             background-size: contain;
-            width: 250px;
-            height: 250px;
-            border: 8px solid #7fff00;
+            width: 300px;
+            height: 300px;
+            border: 10px solid #7fff00;
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
         #clickButton:hover {
-            transform: scale(1.15) rotate(5deg);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transform: scale(1.1) rotate(8deg);
         }
         #clickButton:active {
-            transform: scale(0.95) rotate(-5deg);
+            transform: scale(0.95);
+        }
+        /* Modal Panels */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 30px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 50px;
+            cursor: pointer;
+            color: #ff4444;
+            background: none;
+            border: none;
+        }
+        .close-btn:hover {
+            transform: scale(1.2);
         }
         .item-container {
             background: #e0ffe0;
@@ -101,10 +150,6 @@
             margin: 15px 0;
             border-radius: 20px;
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-            transition: transform 0.2s;
-        }
-        .item-container:hover {
-            transform: translateY(-5px);
         }
         .item-content {
             display: flex;
@@ -124,16 +169,8 @@
             min-width: 120px;
             box-shadow: 0 5px 10px rgba(0,0,0,0.2);
         }
-        .buy-button:hover {
-            background: #228b22;
-        }
-        .buy-button:active {
-            transform: scale(0.95);
-        }
-        .buy-button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-        }
+        .buy-button:hover { background: #228b22; }
+        .buy-button:disabled { background: #cccccc; cursor: not-allowed; }
         .prestige-button {
             background: #ffd700;
             color: #000;
@@ -146,28 +183,14 @@
             font-weight: bold;
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
         }
-        .prestige-button:hover {
-            background: #ffec8b;
-        }
+        .prestige-button:hover { background: #ffec8b; }
         .achievement {
             background: #98fb98;
             padding: 20px;
             margin: 10px 0;
             border-radius: 20px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
-        .locked {
-            opacity: 0.5;
-            filter: grayscale(80%);
-        }
-        #particle-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
+        .locked { opacity: 0.5; filter: grayscale(80%); }
         .particle {
             position: absolute;
             width: 20px;
@@ -181,61 +204,81 @@
             0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.9; }
             100% { transform: translateY(-300px) rotate(360deg) scale(0); opacity: 0; }
         }
-        @media (max-width: 1200px) {
-            .container { grid-template-columns: 1fr 1fr; }
-            .game-area, .full-row { grid-column: 1 / 3; }
-        }
-        @media (max-width: 768px) {
-            .container { grid-template-columns: 1fr; }
-            #clickButton { width: 200px; height: 200px; }
-            h1 { font-size: 48px; }
-        }
     </style>
 </head>
 <body>
     <div class="overlay"></div>
     <div id="particle-container"></div>
-    <div class="container">
+
+    <div class="main-container">
+        <!-- Sidebar Menu -->
+        <div class="sidebar">
+            <div class="menu-btn" id="shopBtn" style="background-image: url('https://thumbs.dreamstime.com/b/small-local-shop-building-facade-art-vector-design-generative-ai-cute-flat-green-awning-perfect-business-marketing-420176125.jpg');" title="Shop"></div>
+            <div class="menu-btn" id="upgradesBtn" style="background-image: url('https://png.pngtree.com/png-clipart/20230802/original/pngtree-three-cute-arrows-concepts-pointing-isolated-vector-picture-image_9231779.png');" title="Upgrades"></div>
+            <div class="menu-btn" id="achBtn" style="background-image: url('https://static.vecteezy.com/system/resources/thumbnails/050/024/334/small/victory-smiles-cartoon-trophy-cup-with-happy-face-achievement-award-icon-vector.jpg');" title="Achievements"></div>
+            <div class="menu-btn" id="statsBtn" style="background-image: url('https://img.freepik.com/premium-vector/increase-money-growth-statistics-chart-concept-yellow-realistic-3d-cute-cartoon-style-white-transparent-background_369481-1480.jpg');" title="Stats"></div>
+            <div class="menu-btn" id="prestigeBtnMenu" style="background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20250317/pngtree-shiny-gold-star-golden-icon-image_17091266.jpg');" title="Prestige"></div>
+        </div>
+
+        <!-- Main Game Area -->
         <div class="game-area">
             <h1>Weed Farm Clicker</h1>
-            <p id="hitsDisplay">Buds: 0</p>
-            <p id="hpsDisplay">Buds per second: 0</p>
+            <div class="top-stats">
+                <p id="hitsDisplay">Buds: 0</p>
+                <p id="hpsDisplay">Buds per second: 0</p>
+            </div>
             <button id="clickButton" title="Harvest Bud!"></button>
         </div>
-       
-        <div class="shop-area">
+    </div>
+
+    <!-- Modals -->
+    <div id="shopModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
             <h2>Farm Shop</h2>
             <div id="shopItems"></div>
         </div>
-       
-        <div class="upgrades-area">
+    </div>
+
+    <div id="upgradesModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
             <h2>Upgrades</h2>
             <div id="upgrades"></div>
         </div>
-       
-        <div class="achievements-area">
+    </div>
+
+    <div id="achModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
             <h2>Achievements</h2>
             <div id="achievements"></div>
         </div>
-       
-        <div class="stats-area full-row">
+    </div>
+
+    <div id="statsModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
             <h2>Stats</h2>
             <p id="totalHits">Total Buds Harvested: 0</p>
             <p id="totalClicks">Total Clicks: 0</p>
             <p id="prestigePoints">Prestige Points: 0</p>
             <p id="prestigeBonus">Prestige Bonus: +0%</p>
         </div>
-       
-        <div class="prestige-area">
+    </div>
+
+    <div id="prestigeModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
             <h2>Prestige</h2>
-            <p>Reset your farm for super bonuses!</p>
+            <p>Reset your farm for super permanent bonuses!</p>
             <p id="prestigeGain">Potential Gain: 0 points</p>
             <button id="prestigeButton" class="prestige-button" disabled>Prestige Now!</button>
         </div>
     </div>
 
     <script>
-        // (Same game logic as the previous fixed version – unchanged for stability)
+        // Game logic (same as before, just adapted to new DOM)
         let buds = 0;
         let budsPerSecond = 0;
         let clickValue = 1;
@@ -275,6 +318,7 @@
             { name: 'Idle Farmer', desc: 'Reach 420 BPS.', unlocked: false, condition: () => budsPerSecond >= 420 }
         ];
 
+        // DOM
         const budsDisplay = document.getElementById('hitsDisplay');
         const bpsDisplay = document.getElementById('hpsDisplay');
         const clickButton = document.getElementById('clickButton');
@@ -288,6 +332,30 @@
         const prestigeGainP = document.getElementById('prestigeGain');
         const prestigeBtn = document.getElementById('prestigeButton');
 
+        // Modals
+        const modals = {
+            shop: document.getElementById('shopModal'),
+            upgrades: document.getElementById('upgradesModal'),
+            ach: document.getElementById('achModal'),
+            stats: document.getElementById('statsModal'),
+            prestige: document.getElementById('prestigeModal')
+        };
+
+        function closeAllModals() {
+            Object.values(modals).forEach(m => m.style.display = 'none');
+        }
+
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.addEventListener('click', closeAllModals);
+        });
+
+        document.getElementById('shopBtn').addEventListener('click', () => { closeAllModals(); modals.shop.style.display = 'flex'; });
+        document.getElementById('upgradesBtn').addEventListener('click', () => { closeAllModals(); modals.upgrades.style.display = 'flex'; });
+        document.getElementById('achBtn').addEventListener('click', () => { closeAllModals(); modals.ach.style.display = 'flex'; });
+        document.getElementById('statsBtn').addEventListener('click', () => { closeAllModals(); modals.stats.style.display = 'flex'; });
+        document.getElementById('prestigeBtnMenu').addEventListener('click', () => { closeAllModals(); modals.prestige.style.display = 'flex'; });
+
+        // Game functions (unchanged except updateDisplays now also updates stats modal)
         function loadGame() {
             const saved = localStorage.getItem('weedFarmClickerSave');
             if (saved) {
@@ -299,7 +367,6 @@
                 totalClicks = data.totalClicks || 0;
                 prestigePoints = data.prestigePoints || 0;
                 prestigeMultiplier = 1 + prestigePoints * 0.1;
-
                 shopItems.forEach((item, i) => {
                     if (data.shop && data.shop[i]) {
                         item.owned = data.shop[i].owned;
@@ -338,6 +405,7 @@
             prestigeGainP.textContent = `Potential Gain: ${gain} points`;
             prestigeBtn.disabled = gain <= 0;
 
+            // Update shop
             shopItems.forEach(item => {
                 if (item.button && item.text) {
                     item.button.disabled = buds < item.cost;
@@ -345,11 +413,13 @@
                 }
             });
 
+            // Update upgrades
             upgrades.forEach(u => {
                 if (u.container) {
                     u.container.style.display = u.purchased ? 'none' : 'block';
-                    if (!u.purchased && u.container.querySelector('.buy-button')) {
-                        u.container.querySelector('.buy-button').disabled = buds < u.cost;
+                    if (!u.purchased) {
+                        const btn = u.container.querySelector('.buy-button');
+                        if (btn) btn.disabled = buds < u.cost;
                     }
                 }
             });
@@ -398,6 +468,22 @@
             });
         }
 
+        function renderAchievements() {
+            achDiv.innerHTML = '';
+            achievements.forEach(a => {
+                const el = document.createElement('div');
+                el.className = `achievement ${a.unlocked ? '' : 'locked'}`;
+                el.innerHTML = `<strong>${a.name}</strong><br>${a.desc}`;
+                achDiv.appendChild(el);
+            });
+        }
+
+        function checkAchievements() {
+            achievements.forEach(a => {
+                if (!a.unlocked && a.condition()) a.unlocked = true;
+            });
+        }
+
         function buyItem(idx) {
             const item = shopItems[idx];
             if (buds >= item.cost) {
@@ -422,24 +508,6 @@
             }
         }
 
-        function renderAchievements() {
-            achDiv.innerHTML = '';
-            achievements.forEach(a => {
-                const el = document.createElement('div');
-                el.className = `achievement ${a.unlocked ? '' : 'locked'}`;
-                el.innerHTML = `<strong>${a.name}</strong><br>${a.desc}`;
-                achDiv.appendChild(el);
-            });
-        }
-
-        function checkAchievements() {
-            achievements.forEach(a => {
-                if (!a.unlocked && a.condition()) {
-                    a.unlocked = true;
-                }
-            });
-        }
-
         clickButton.addEventListener('click', () => {
             const gain = clickValue * prestigeMultiplier;
             buds += gain;
@@ -455,19 +523,9 @@
             if (gain > 0 && confirm('Prestige? This will reset everything for permanent bonuses!')) {
                 prestigePoints += gain;
                 prestigeMultiplier = 1 + prestigePoints * 0.1;
-
-                buds = 0;
-                totalBuds = 0;
-                totalClicks = 0;
-                budsPerSecond = 0;
-                clickValue = 1;
-
-                shopItems.forEach(i => {
-                    i.owned = 0;
-                    i.cost = i.baseCost;
-                });
+                buds = 0; totalBuds = 0; totalClicks = 0; budsPerSecond = 0; clickValue = 1;
+                shopItems.forEach(i => { i.owned = 0; i.cost = i.baseCost; });
                 upgrades.forEach(u => u.purchased = false);
-
                 recalculateBPS();
                 updateDisplays();
                 saveGame();
@@ -498,6 +556,7 @@
 
         setInterval(saveGame, 30000);
 
+        // Init
         createShop();
         createUpgrades();
         loadGame();
