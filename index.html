@@ -16,9 +16,6 @@
             background-image: url('https://img.freepik.com/premium-photo/cannabis-bushes-cartoon-illustration-marijuana-back_999671-3579.jpg');
             background-size: cover;
             background-position: center;
-            display: flex;
-            justify-content: flex-start; /* Align everything to the left */
-            align-items: center;
         }
         .overlay {
             position: fixed;
@@ -39,23 +36,27 @@
             width: 100%;
             height: 100vh;
             display: flex;
-            justify-content: flex-start;
         }
-        /* Sidebar - now flush left, no white background, larger buttons */
+        /* Sidebar - flush left, transparent, large buttons */
         .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
             width: 180px;
-            background: transparent; /* Removed white background */
+            height: 100%;
+            background: transparent;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 30px 0;
             gap: 35px;
+            z-index: 5;
         }
         .menu-btn {
             width: 160px;
             height: 70px;
-            background: rgba(240, 248, 240, 0.9); /* Slight transparency for better blend */
+            background: rgba(240, 248, 240, 0.9);
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 6px 16px rgba(0,0,0,0.3);
@@ -74,15 +75,16 @@
         .menu-btn:active {
             transform: scale(0.98);
         }
-        /* Main game area - shifted right, larger elements */
+        /* Main game area - full screen, centered */
         .game-area {
-            flex: 1;
+            width: 100%;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 40px;
+            padding: 40px 200px 40px 200px; /* extra left padding to avoid overlap with sidebar */
         }
         h1 {
             font-size: 56px;
@@ -101,8 +103,8 @@
         #clickButton {
             background: url('https://png.pngtree.com/background/20250715/original/pngtree-adorable-smiling-weed-leaf-with-pastel-background-picture-image_16711452.jpg') no-repeat center center;
             background-size: contain;
-            width: 300px;
-            height: 300px;
+            width: 320px;
+            height: 320px;
             border: 10px solid #7fff00;
             border-radius: 50%;
             cursor: pointer;
@@ -115,24 +117,108 @@
         #clickButton:active {
             transform: scale(0.95);
         }
-        /* Modals - slightly larger */
-        .modal-content {
-            padding: 35px;
-            max-width: 800px;
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
         }
-        h2 { font-size: 32px; }
-        .item-content { font-size: 18px; gap: 20px; }
-        .buy-button { padding: 15px 30px; font-size: 18px; }
-        .prestige-button { padding: 20px; font-size: 24px; }
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 40px;
+            cursor: pointer;
+            color: #ff4444;
+        }
+        .close-btn:hover {
+            transform: scale(1.2);
+        }
+        h2 { font-size: 32px; margin-top: 0; }
+        .item-container {
+            background: #e0ffe0;
+            padding: 18px;
+            margin: 15px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+        }
+        .item-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            font-size: 18px;
+        }
+        .buy-button {
+            background: #32cd32;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 18px;
+            min-width: 120px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .buy-button:hover { background: #228b22; }
+        .buy-button:disabled { background: #cccccc; }
+        .prestige-button {
+            background: #ffd700;
+            padding: 20px;
+            font-size: 24px;
+            border-radius: 40px;
+            width: 100%;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        .achievement {
+            padding: 18px;
+            margin: 10px 0;
+            border-radius: 15px;
+            font-size: 18px;
+        }
         .particle {
             width: 18px;
             height: 18px;
         }
         @media (max-width: 768px) {
-            .main-container { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; flex-wrap: wrap; justify-content: center; padding: 20px; gap: 15px; }
-            .menu-btn { width: 140px; height: 60px; font-size: 20px; }
-            #clickButton { width: 220px; height: 220px; }
+            .sidebar {
+                width: 100%;
+                height: 120px;
+                flex-direction: row;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                padding: 15px 0;
+                gap: 15px;
+            }
+            .menu-btn {
+                width: 140px;
+                height: 60px;
+                font-size: 18px;
+            }
+            .game-area {
+                padding: 40px 20px 140px 20px; /* space for bottom bar */
+            }
+            #clickButton {
+                width: 220px;
+                height: 220px;
+            }
             h1 { font-size: 44px; }
         }
     </style>
@@ -141,17 +227,17 @@
     <div class="overlay"></div>
     <div id="particle-container"></div>
 
-    <div class="main-container">
-        <!-- Sidebar - now flush left, transparent bg, larger -->
-        <div class="sidebar">
-            <div class="menu-btn" id="shopBtn">Shop</div>
-            <div class="menu-btn" id="upgradesBtn">Upgrades</div>
-            <div class="menu-btn" id="achBtn">Achievements</div>
-            <div class="menu-btn" id="statsBtn">Stats</div>
-            <div class="menu-btn" id="prestigeBtnMenu">Prestige</div>
-        </div>
+    <!-- Sidebar fixed flush left -->
+    <div class="sidebar">
+        <div class="menu-btn" id="shopBtn">Shop</div>
+        <div class="menu-btn" id="upgradesBtn">Upgrades</div>
+        <div class="menu-btn" id="achBtn">Achievements</div>
+        <div class="menu-btn" id="statsBtn">Stats</div>
+        <div class="menu-btn" id="prestigeBtnMenu">Prestige</div>
+    </div>
 
-        <!-- Main Game Area -->
+    <!-- Main centered content -->
+    <div class="main-container">
         <div class="game-area">
             <h1>Weed Farm Clicker</h1>
             <div class="top-stats">
@@ -162,7 +248,7 @@
         </div>
     </div>
 
-    <!-- Modals remain the same -->
+    <!-- Modals (unchanged) -->
     <div id="shopModal" class="modal">
         <div class="modal-content">
             <button class="close-btn">&times;</button>
@@ -209,7 +295,7 @@
     </div>
 
     <script>
-        // Game logic unchanged
+        // Game logic unchanged from your last working version
         let buds = 0;
         let budsPerSecond = 0;
         let clickValue = 1;
@@ -461,7 +547,7 @@
         function createParticles() {
             const container = document.getElementById('particle-container');
             const rect = clickButton.getBoundingClientRect();
-            for (let i = 0; i = 12; i++) {
+            for (let i = 0; i < 12; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
                 p.style.left = `${rect.left + rect.width / 2 + (Math.random() * 80 - 40)}px`;
