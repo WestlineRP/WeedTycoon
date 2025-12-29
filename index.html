@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌿 Weed Farm Tycoon 🌿</title>
+    <title>🌿 Weed Shaft Tycoon 🌿</title>
     <style>
         body {
             margin: 0;
@@ -33,87 +33,27 @@
             margin: 10px 0;
             text-shadow: 0 0 10px #FFD700;
         }
-        #harvester {
-            text-align: center;
-            font-size: 5em;
-            cursor: pointer;
-            margin: 40px 0;
-            padding: 20px;
+        #farmCanvas {
+            width: 90vw;
+            max-width: 640px;
+            height: auto;
             border: 3px solid #90EE90;
             border-radius: 20px;
-            background: rgba(144, 238, 144, 0.2);
-            transition: transform 0.1s, box-shadow 0.2s;
-            user-select: none;
-        }
-        #harvester:hover {
-            box-shadow: 0 0 30px #90EE90;
-        }
-        #harvester:active {
-            transform: scale(0.95);
-        }
-        #shops {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-        }
-        .shopItem {
-            border: 3px solid #90EE90;
-            padding: 25px;
-            margin: 10px;
-            border-radius: 15px;
-            background: rgba(0, 100, 0, 0.6);
-            backdrop-filter: blur(10px);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .shopItem:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(144, 238, 144, 0.5);
-        }
-        .shopItem h3 {
-            font-size: 1.5em;
-            margin: 0 0 10px 0;
-            text-align: center;
-        }
-        .shopItem p {
-            font-style: italic;
-            margin: 5px 0;
-        }
-        .owned, .prod, .cost {
-            font-size: 1.2em;
-            margin: 10px 0;
-            text-align: center;
-        }
-        button {
-            width: 100%;
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            color: #000;
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.3em;
-            font-weight: bold;
+            display: block;
+            margin: 20px auto;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-        button:hover:not(:disabled) {
-            background: linear-gradient(45deg, #FFA500, #FF8C00);
-        }
-        button:disabled {
-            background: #555;
-            color: #999;
-            cursor: not-allowed;
+            box-shadow: 0 0 30px rgba(144, 238, 144, 0.5);
         }
     </style>
 </head>
 <body>
     <div id="container">
-        <h1>🌿 Weed Farm Tycoon 🌿</h1>
+        <h1>🌿 Weed Shaft Tycoon 🌿</h1>
         <div id="stats">
             <div id="cash">Cash: $0</div>
             <div id="persec">Per second: $0</div>
         </div>
-        <div id="harvester" onclick="harvest()">🍃 Click to Harvest 🍃</div>
-        <div id="shops"></div>
+        <canvas id="farmCanvas" width="640" height="800"></canvas>
     </div>
 
     <script>
@@ -121,20 +61,24 @@
             cash: 0,
             tps: 0,
             lastUpdate: Date.now(),
-            shops: [
-                {name: '🗑️ Trash Can', desc: 'Your first grow op in a trash can.', baseCost: 15, count: 0, prod: 0.1, costMult: 1.15},
-                {name: '🚿 Sink Grow', desc: 'Guerrilla grow under the bathroom sink.', baseCost: 100, count: 0, prod: 0.8, costMult: 1.15},
-                {name: '👕 Closet', desc: 'Hidden closet operation.', baseCost: 690, count: 0, prod: 4.5, costMult: 1.15},
-                {name: '⛺ Grow Tent', desc: 'Pro 4x4 grow tent setup.', baseCost: 4500, count: 0, prod: 25, costMult: 1.15},
-                {name: '🛏️ Spare Room', desc: 'Convert the spare bedroom.', baseCost: 31000, count: 0, prod: 130, costMult: 1.15},
-                {name: '🏠 Basement', desc: 'Full basement hydro farm.', baseCost: 260000, count: 0, prod: 650, costMult: 1.15},
-                {name: '🚗 Garage', desc: 'Garage packed with plants.', baseCost: 2600000, count: 0, prod: 3300, costMult: 1.15},
-                {name: '🏭 Warehouse', desc: 'Abandoned warehouse takeover.', baseCost: 30000000, count: 0, prod: 18000, costMult: 1.15},
-                {name: '🧪 Underground Lab', desc: 'Secret underground facility.', baseCost: 400000000, count: 0, prod: 110000, costMult: 1.15},
-                {name: '🌆 Entire Block', desc: 'You own the whole block now.', baseCost: 7000000000, count: 0, prod: 750000, costMult: 1.15}
-            ],
-            version: 1
+            floors: [
+                {name: '🗑️ Trash Can', baseCost: 15, count: 0, prod: 0.1, costMult: 1.15, color: '#006400'},
+                {name: '🚿 Sink Grow', baseCost: 100, count: 0, prod: 0.8, costMult: 1.15, color: '#32CD32'},
+                {name: '👕 Closet', baseCost: 690, count: 0, prod: 4.5, costMult: 1.15, color: '#228B22'},
+                {name: '⛺ Grow Tent', baseCost: 4500, count: 0, prod: 25, costMult: 1.15, color: '#20B2AA'},
+                {name: '🛏️ Spare Room', baseCost: 31000, count: 0, prod: 130, costMult: 1.15, color: '#9370DB'},
+                {name: '🏠 Basement', baseCost: 260000, count: 0, prod: 650, costMult: 1.15, color: '#DAA520'},
+                {name: '🚗 Garage', baseCost: 2600000, count: 0, prod: 3300, costMult: 1.15, color: '#FF8C00'},
+                {name: '🏭 Warehouse', baseCost: 30000000, count: 0, prod: 18000, costMult: 1.15, color: '#FF69B4'},
+                {name: '🧪 Underground Lab', baseCost: 400000000, count: 0, prod: 110000, costMult: 1.15, color: '#00FFFF'},
+                {name: '🌆 Entire Block', baseCost: 7000000000, count: 0, prod: 750000, costMult: 1.15, color: '#FF00FF'}
+            ]
         };
+
+        let canvas, ctx, workerPhases, products, buttonRects, lastFrame = 0;
+
+        const FLOOR_HEIGHT = 80;
+        const NUM_FLOORS = 10;
 
         function formatNumber(num) {
             if (num === 0) return '0';
@@ -149,22 +93,22 @@
 
         function calcTps() {
             game.tps = 0;
-            game.shops.forEach(shop => {
-                game.tps += shop.prod * shop.count;
+            game.floors.forEach(floor => {
+                game.tps += floor.prod * floor.count;
             });
         }
 
         function saveGame() {
-            localStorage.setItem('weedFarmTycoon', JSON.stringify(game));
+            localStorage.setItem('weedShaftTycoon', JSON.stringify(game));
         }
 
         function loadGame() {
-            const saved = localStorage.getItem('weedFarmTycoon');
+            const saved = localStorage.getItem('weedShaftTycoon');
             if (saved) {
                 try {
                     const loaded = JSON.parse(saved);
                     game.cash = loaded.cash || 0;
-                    game.shops = loaded.shops || game.shops;
+                    game.floors = loaded.floors.map((f, i) => ({...game.floors[i], ...f})) || game.floors;
                     game.lastUpdate = loaded.lastUpdate || Date.now();
                 } catch (e) {
                     console.log('Load failed, starting new game.');
@@ -172,59 +116,260 @@
             }
         }
 
-        function createShopElements() {
-            const shopsDiv = document.getElementById('shops');
-            shopsDiv.innerHTML = '';
-            game.shops.forEach((shop, i) => {
-                const div = document.createElement('div');
-                div.className = 'shopItem';
-                div.id = `shop${i}`;
-                div.innerHTML = `
-                    <h3>${shop.name}</h3>
-                    <p>${shop.desc}</p>
-                    <div class="owned">Owned: 0</div>
-                    <div class="prod">Produces: $0/s</div>
-                    <div class="cost">Next: $${formatNumber(shop.baseCost)}</div>
-                    <button onclick="buy(${i})">Buy</button>
-                `;
-                shopsDiv.appendChild(div);
-            });
-        }
-
         function display() {
             document.getElementById('cash').textContent = 'Cash: $' + formatNumber(game.cash);
             document.getElementById('persec').textContent = 'Per second: $' + formatNumber(game.tps);
-
-            game.shops.forEach((shop, i) => {
-                const nextCost = Math.floor(shop.baseCost * Math.pow(shop.costMult, shop.count));
-                const div = document.getElementById(`shop${i}`);
-                div.querySelector('.owned').textContent = `Owned: ${shop.count}`;
-                div.querySelector('.prod').textContent = `Produces: $${formatNumber(shop.prod * shop.count)}/s`;
-                div.querySelector('.cost').textContent = `Next: $${formatNumber(nextCost)}`;
-                const btn = div.querySelector('button');
-                const canAfford = game.cash >= nextCost;
-                btn.disabled = !canAfford;
-                btn.textContent = canAfford ? 'Buy' : 'Not Enough';
-            });
         }
 
         function buy(i) {
-            const shop = game.shops[i];
-            const cost = Math.floor(shop.baseCost * Math.pow(shop.costMult, shop.count));
+            const floor = game.floors[i];
+            const cost = Math.floor(floor.baseCost * Math.pow(floor.costMult, floor.count));
             if (game.cash >= cost) {
                 game.cash -= cost;
-                shop.count++;
+                floor.count++;
                 calcTps();
                 display();
                 saveGame();
             }
         }
 
-        function harvest() {
-            if (game.tps > 0) {
-                game.cash += game.tps / 2;
+        function drawLeaf(x, y, color, scale = 1, rot = 0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+            ctx.rotate(rot);
+            ctx.fillStyle = color;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 1;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 7, 16, Math.PI / 6 + rot, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#228B22';
+            ctx.shadowBlur = 0;
+            ctx.fillRect(-1.5, 14, 3, 6);
+            ctx.restore();
+        }
+
+        function updateVisuals(delta) {
+            const dt = delta / 16.67; // normalize to 60fps
+            workerPhases.forEach((_, i) => {
+                workerPhases[i] = (workerPhases[i] + 0.08 * dt) % (Math.PI * 2);
+            });
+
+            // update products
+            products.forEach(p => {
+                p.y -= 200 * (delta / 1000);
+                p.phase += 0.4 * (delta / 1000);
+                p.opacity -= 0.8 * (delta / 1000);
+            });
+            products = products.filter(p => p.y > -40 && p.opacity > 0);
+
+            // emit products
+            game.floors.forEach((f, i) => {
+                const rate = f.count * 0.5 * (delta / 1000);
+                if (Math.random() < rate) {
+                    products.push({
+                        y: i * FLOOR_HEIGHT + 50 + (Math.random() * 20),
+                        x: 320 + (Math.random() - 0.5) * 60,
+                        scale: 0.6 + Math.random() * 0.5,
+                        opacity: 1,
+                        phase: Math.random() * Math.PI * 2,
+                        wobble: 12 + Math.random() * 8
+                    });
+                }
+            });
+        }
+
+        function drawFarm() {
+            const time = Date.now() / 1000;
+            ctx.clearRect(0, 0, 640, 800);
+
+            // background gradient
+            const bgGrad = ctx.createLinearGradient(0, 0, 0, 800);
+            bgGrad.addColorStop(0, '#1a5a1a');
+            bgGrad.addColorStop(0.5, '#0f3f0f');
+            bgGrad.addColorStop(1, '#050a05');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, 640, 800);
+
+            // side walls
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(0, 0, 25, 800);
+            ctx.fillRect(615, 0, 25, 800);
+
+            // elevator shaft
+            ctx.fillStyle = 'rgba(139, 69, 19, 0.4)';
+            ctx.fillRect(280, 0, 80, 800);
+
+            // floor lines
+            ctx.strokeStyle = '#654321';
+            ctx.lineWidth = 4;
+            for (let i = 0; i <= NUM_FLOORS; i++) {
+                const y = i * FLOOR_HEIGHT;
+                ctx.beginPath();
+                ctx.moveTo(25, y);
+                ctx.lineTo(615, y);
+                ctx.stroke();
+            }
+
+            // floors
+            game.floors.forEach((floor, i) => {
+                const y = i * FLOOR_HEIGHT;
+                const nextCost = Math.floor(floor.baseCost * Math.pow(floor.costMult, floor.count));
+
+                // label
+                ctx.fillStyle = floor.count > 0 ? '#FFF' : '#888';
+                ctx.font = 'bold 20px Arial';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'top';
+                ctx.fillText(floor.name, 35, y + 15);
+
+                // cost top right
+                ctx.textAlign = 'right';
+                ctx.font = 'bold 18px Arial';
+                ctx.fillStyle = '#FFF';
+                ctx.fillText('$' + formatNumber(nextCost), 580, y + 18);
+
+                if (floor.count > 0) {
+                    // owned & prod
+                    ctx.font = 'bold 20px Arial';
+                    ctx.fillStyle = '#90EE90';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(`x${floor.count}`, 580, y + 45);
+
+                    ctx.textAlign = 'left';
+                    ctx.font = '16px Arial';
+                    ctx.fillStyle = '#FFD700';
+                    ctx.fillText(`+$${formatNumber(floor.prod * floor.count)}/s`, 35, y + 48);
+
+                    // floor glow bg
+                    const fGrad = ctx.createRadialGradient(100 + i * 30, y + 40, 20, 320, y + 40, 150);
+                    fGrad.addColorStop(0, floor.color);
+                    fGrad.addColorStop(0.7, floor.color + '88');
+                    fGrad.addColorStop(1, '#000');
+                    ctx.fillStyle = fGrad;
+                    ctx.fillRect(30, y + 5, 580, 70);
+
+                    // plants
+                    const numPlants = Math.min(16, Math.floor(floor.count * 1.2) + 2);
+                    for (let p = 0; p < numPlants; p++) {
+                        let pxLeft = 45 + (p % 5) * 65 + Math.sin(time * 1.5 + p) * 8;
+                        let py = y + 28 + Math.sin(time * 2 + p * 1.2) * 7;
+                        let ps = 0.7 + Math.random() * 0.6;
+                        let prot = p * 0.4;
+                        drawLeaf(pxLeft, py, floor.color, ps, prot);
+
+                        if (p < 8) {
+                            let pxRight = 450 + (p % 4) * 45 + Math.sin(time * 1.8 + p + 10) * 6;
+                            drawLeaf(pxRight, py + 5, floor.color, ps * 0.9, -prot);
+                        }
+                    }
+
+                    // workers
+                    const numWorkers = Math.min(7, floor.count);
+                    const phase = workerPhases[i];
+                    for (let w = 0; w < numWorkers; w++) {
+                        const wx = 110 + (w / numWorkers) * 280 + Math.sin(phase + w * 1.2) * 28;
+                        const wy = y + 58;
+                        ctx.font = 'bold 30px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillStyle = '#FFD700';
+                        ctx.fillText('👨‍🌾', wx, wy);
+                    }
+                } else {
+                    // locked overlay
+                    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                    ctx.fillRect(30, y + 5, 580, 70);
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                    ctx.font = 'bold 28px Arial';
+                    ctx.fillText('LOCKED', 320, y + 42);
+                }
+            });
+
+            // products
+            products.forEach(p => {
+                ctx.save();
+                ctx.globalAlpha = p.opacity;
+                ctx.font = `${Math.floor(18 * p.scale)}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const ex = p.x + Math.sin(p.phase) * p.wobble;
+                ctx.fillText('🍃', ex, p.y);
+                ctx.restore();
+            });
+
+            // buy buttons
+            buttonRects.length = 0;
+            game.floors.forEach((floor, i) => {
+                const y = i * FLOOR_HEIGHT + 32;
+                const btnX = 435;
+                const btnY = y;
+                const btnW = 170;
+                const btnH = 36;
+                const nextCost = Math.floor(floor.baseCost * Math.pow(floor.costMult, floor.count));
+                const canAfford = game.cash >= nextCost;
+
+                buttonRects[i] = {x: btnX, y: btnY, w: btnW, h: btnH};
+
+                // btn bg
+                const btnGrad = ctx.createLinearGradient(btnX, btnY, btnX + btnW, btnY + btnH);
+                btnGrad.addColorStop(0, canAfford ? '#FFD700' : '#555');
+                btnGrad.addColorStop(1, canAfford ? '#FFA500' : '#333');
+                ctx.fillStyle = btnGrad;
+                ctx.fillRect(btnX, btnY, btnW, btnH);
+
+                // border
+                ctx.strokeStyle = canAfford ? '#FF8C00' : '#777';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(btnX, btnY, btnW, btnH);
+
+                // text
+                ctx.fillStyle = '#000';
+                ctx.font = `bold ${floor.count === 0 ? 24 : 22}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const btnText = floor.count === 0 ? 'UNLOCK' : 'HIRE';
+                ctx.fillText(btnText, btnX + btnW / 2, btnY + btnH / 2);
+            });
+        }
+
+        function handleClick(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const mx = (e.clientX - rect.left) * scaleX;
+            const my = (e.clientY - rect.top) * scaleY;
+
+            const fx = Math.floor(my / FLOOR_HEIGHT);
+            if (fx < 0 || fx >= NUM_FLOORS) return;
+
+            const btn = buttonRects[fx];
+            if (btn && mx >= btn.x && mx <= btn.x + btn.w && my >= btn.y && my <= btn.y + btn.h) {
+                buy(fx);
+                return;
+            }
+
+            const floor = game.floors[fx];
+            if (floor.count > 0) {
+                const boost = floor.prod * floor.count * 15; // 15s boost!
+                game.cash += boost;
+                // extra products burst
+                for (let k = 0; k < 8; k++) {
+                    products.push({
+                        y: fx * FLOOR_HEIGHT + 50 + Math.random() * 15,
+                        x: 320 + (Math.random() - 0.5) * 80,
+                        scale: 0.8 + Math.random() * 0.6,
+                        opacity: 1,
+                        phase: Math.random() * Math.PI * 2,
+                        wobble: 20
+                    });
+                }
                 display();
-                saveGame();
             }
         }
 
@@ -235,19 +380,37 @@
             if (game.tps > 0) {
                 game.cash += game.tps * delta;
             }
+            calcTps();
             display();
         }
 
         window.onload = function() {
+            canvas = document.getElementById('farmCanvas');
+            ctx = canvas.getContext('2d');
+            workerPhases = new Array(NUM_FLOORS).fill(0);
+            products = [];
+            buttonRects = [];
+
             loadGame();
-            const diff = Math.min((Date.now() - game.lastUpdate) / 1000, 86400); // 24h max offline
+            const diff = Math.min((Date.now() - game.lastUpdate) / 1000, 86400);
             game.cash += game.tps * diff;
             game.lastUpdate = Date.now();
             calcTps();
-            createShopElements();
             display();
+
+            canvas.onclick = handleClick;
+
             setInterval(gameLoop, 100);
             setInterval(saveGame, 5000);
+
+            function animate(time) {
+                const delta = time - lastFrame || 16;
+                updateVisuals(delta);
+                drawFarm();
+                lastFrame = time;
+                requestAnimationFrame(animate);
+            }
+            requestAnimationFrame(animate);
         };
     </script>
 </body>
