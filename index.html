@@ -95,20 +95,21 @@
         #clickButton:active {
             transform: scale(0.95);
         }
-        .shop-item, .upgrade-item {
+        .item-container {
             background: #f0f8f0;
             padding: 15px;
             margin: 10px 0;
             border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: box-shadow 0.2s;
+        }
+        .item-container:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        .item-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .shop-item:hover, .upgrade-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
         }
         .buy-button {
             background: #4CAF50;
@@ -352,18 +353,20 @@
         function renderShop() {
             shopDiv.innerHTML = '';
             shopItems.forEach((item, idx) => {
-                const el = document.createElement('div');
-                el.className = 'shop-item';
-                el.innerHTML = `
-                    <div>
-                        <strong>${item.name} (${item.owned})</strong><br>
-                        ${item.desc}<br>
-                        Cost: ${Math.floor(item.cost)} buds | +${item.bps} BPS
+                const container = document.createElement('div');
+                container.className = 'item-container';
+                container.innerHTML = `
+                    <div class="item-content">
+                        <div>
+                            <strong>${item.name} (${item.owned})</strong><br>
+                            ${item.desc}<br>
+                            Cost: ${Math.floor(item.cost)} buds | +${item.bps} BPS
+                        </div>
+                        <button class="buy-button" ${buds < item.cost ? 'disabled' : ''}>Buy</button>
                     </div>
-                    <button class="buy-button" ${buds < item.cost ? 'disabled' : ''}>Buy</button>
                 `;
-                el.querySelector('button').onclick = () => buyItem(idx);
-                shopDiv.appendChild(el);
+                container.querySelector('button').onclick = () => buyItem(idx);
+                shopDiv.appendChild(container);
             });
         }
 
@@ -371,18 +374,20 @@
             upgradesDiv.innerHTML = '';
             upgrades.forEach((u, idx) => {
                 if (u.purchased) return;
-                const el = document.createElement('div');
-                el.className = 'upgrade-item';
-                el.innerHTML = `
-                    <div>
-                        <strong>${u.name}</strong><br>
-                        ${u.desc}<br>
-                        Cost: ${u.cost} buds
+                const container = document.createElement('div');
+                container.className = 'item-container';
+                container.innerHTML = `
+                    <div class="item-content">
+                        <div>
+                            <strong>${u.name}</strong><br>
+                            ${u.desc}<br>
+                            Cost: ${u.cost} buds
+                        </div>
+                        <button class="buy-button" ${buds < u.cost ? 'disabled' : ''}>Buy</button>
                     </div>
-                    <button class="buy-button" ${buds < u.cost ? 'disabled' : ''}>Buy</button>
                 `;
-                el.querySelector('button').onclick = () => buyUpgrade(idx);
-                upgradesDiv.appendChild(el);
+                container.querySelector('button').onclick = () => buyUpgrade(idx);
+                upgradesDiv.appendChild(container);
             });
         }
 
