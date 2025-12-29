@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 Weed Farm Tycoon 🌿</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a420a 0%, #1a5a1a 50%, #006400 100%);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+        #container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            text-shadow: 0 0 20px #90EE90;
+            margin-bottom: 20px;
+        }
+        #stats {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        #stats div {
+            margin: 10px 0;
+            text-shadow: 0 0 10px #FFD700;
+        }
+        #harvester {
+            text-align: center;
+            font-size: 5em;
+            cursor: pointer;
+            margin: 40px 0;
+            padding: 20px;
+            border: 3px solid #90EE90;
+            border-radius: 20px;
+            background: rgba(144, 238, 144, 0.2);
+            transition: transform 0.1s, box-shadow 0.2s;
+            user-select: none;
+        }
+        #harvester:hover {
+            box-shadow: 0 0 30px #90EE90;
+        }
+        #harvester:active {
+            transform: scale(0.95);
+        }
+        #shops {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .shopItem {
+            border: 3px solid #90EE90;
+            padding: 25px;
+            margin: 10px;
+            border-radius: 15px;
+            background: rgba(0, 100, 0, 0.6);
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .shopItem:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(144, 238, 144, 0.5);
+        }
+        .shopItem h3 {
+            font-size: 1.5em;
+            margin: 0 0 10px 0;
+            text-align: center;
+        }
+        .shopItem p {
+            font-style: italic;
+            margin: 5px 0;
+        }
+        .owned, .prod, .cost {
+            font-size: 1.2em;
+            margin: 10px 0;
+            text-align: center;
+        }
+        button {
+            width: 100%;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover:not(:disabled) {
+            background: linear-gradient(45deg, #FFA500, #FF8C00);
+        }
+        button:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>🌿 Weed Farm Tycoon 🌿</h1>
+        <div id="stats">
+            <div id="cash">Cash: $0</div>
+            <div id="persec">Per second: $0</div>
+        </div>
+        <div id="harvester" onclick="harvest()">🍃 Click to Harvest 🍃</div>
+        <div id="shops"></div>
+    </div>
+
+    <script>
+        let game = {
+            cash: 0,
+            tps: 0,
+            lastUpdate: Date.now(),
+            shops: [
+                {name: '🗑️ Trash Can', desc: 'Your first grow op in a trash can.', baseCost: 15, count: 0, prod: 0.1, costMult: 1.15},
+                {name: '🚿 Sink Grow', desc: 'Guerrilla grow under the bathroom sink.', baseCost: 100, count: 0, prod: 0.8, costMult: 1.15},
+                {name: '👕 Closet', desc: 'Hidden closet operation.', baseCost: 690, count: 0, prod: 4.5, costMult: 1.15},
+                {name: '⛺ Grow Tent', desc: 'Pro 4x4 grow tent setup.', baseCost: 4500, count: 0, prod: 25, costMult: 1.15},
+                {name: '🛏️ Spare Room', desc: 'Convert the spare bedroom.', baseCost: 31000, count: 0, prod: 130, costMult: 1.15},
+                {name: '🏠 Basement', desc: 'Full basement hydro farm.', baseCost: 260000, count: 0, prod: 650, costMult: 1.15},
+                {name: '🚗 Garage', desc: 'Garage packed with plants.', baseCost: 2600000, count: 0, prod: 3300, costMult: 1.15},
+                {name: '🏭 Warehouse', desc: 'Abandoned warehouse takeover.', baseCost: 30000000, count: 0, prod: 18000, costMult: 1.15},
+                {name: '🧪 Underground Lab', desc: 'Secret underground facility.', baseCost: 400000000, count: 0, prod: 110000, costMult: 1.15},
+                {name: '🌆 Entire Block', desc: 'You own the whole block now.', baseCost: 7000000000, count: 0, prod: 750000, costMult: 1.15}
+            ],
+            version: 1
+        };
+
+        function formatNumber(num) {
+            if (num === 0) return '0';
+            const suffixes = ['', 'K', 'M', 'B', 'T'];
+            let i = 0;
+            while (num >= 1000 && i < suffixes.length - 1) {
+                num /= 1000;
+                i++;
+            }
+            return (Math.round(num * 10) / 10) + suffixes[i];
+        }
+
+        function calcTps() {
+            game.tps = 0;
+            game.shops.forEach(shop => {
+                game.tps += shop.prod * shop.count;
+            });
+        }
+
+        function saveGame() {
+            localStorage.setItem('weedFarmTycoon', JSON.stringify(game));
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('weedFarmTycoon');
+            if (saved) {
+                try {
+                    const loaded = JSON.parse(saved);
+                    game.cash = loaded.cash || 0;
+                    game.shops = loaded.shops || game.shops;
+                    game.lastUpdate = loaded.lastUpdate || Date.now();
+                } catch (e) {
+                    console.log('Load failed, starting new game.');
+                }
+            }
+        }
+
+        function createShopElements() {
+            const shopsDiv = document.getElementById('shops');
+            shopsDiv.innerHTML = '';
+            game.shops.forEach((shop, i) => {
+                const div = document.createElement('div');
+                div.className = 'shopItem';
+                div.id = `shop${i}`;
+                div.innerHTML = `
+                    <h3>${shop.name}</h3>
+                    <p>${shop.desc}</p>
+                    <div class="owned">Owned: 0</div>
+                    <div class="prod">Produces: $0/s</div>
+                    <div class="cost">Next: $${formatNumber(shop.baseCost)}</div>
+                    <button onclick="buy(${i})">Buy</button>
+                `;
+                shopsDiv.appendChild(div);
+            });
+        }
+
+        function display() {
+            document.getElementById('cash').textContent = 'Cash: $' + formatNumber(game.cash);
+            document.getElementById('persec').textContent = 'Per second: $' + formatNumber(game.tps);
+
+            game.shops.forEach((shop, i) => {
+                const nextCost = Math.floor(shop.baseCost * Math.pow(shop.costMult, shop.count));
+                const div = document.getElementById(`shop${i}`);
+                div.querySelector('.owned').textContent = `Owned: ${shop.count}`;
+                div.querySelector('.prod').textContent = `Produces: $${formatNumber(shop.prod * shop.count)}/s`;
+                div.querySelector('.cost').textContent = `Next: $${formatNumber(nextCost)}`;
+                const btn = div.querySelector('button');
+                const canAfford = game.cash >= nextCost;
+                btn.disabled = !canAfford;
+                btn.textContent = canAfford ? 'Buy' : 'Not Enough';
+            });
+        }
+
+        function buy(i) {
+            const shop = game.shops[i];
+            const cost = Math.floor(shop.baseCost * Math.pow(shop.costMult, shop.count));
+            if (game.cash >= cost) {
+                game.cash -= cost;
+                shop.count++;
+                calcTps();
+                display();
+                saveGame();
+            }
+        }
+
+        function harvest() {
+            if (game.tps > 0) {
+                game.cash += game.tps / 2;
+                display();
+                saveGame();
+            }
+        }
+
+        function gameLoop() {
+            const now = Date.now();
+            const delta = (now - game.lastUpdate) / 1000;
+            game.lastUpdate = now;
+            if (game.tps > 0) {
+                game.cash += game.tps * delta;
+            }
+            display();
+        }
+
+        window.onload = function() {
+            loadGame();
+            const diff = Math.min((Date.now() - game.lastUpdate) / 1000, 86400); // 24h max offline
+            game.cash += game.tps * diff;
+            game.lastUpdate = Date.now();
+            calcTps();
+            createShopElements();
+            display();
+            setInterval(gameLoop, 100);
+            setInterval(saveGame, 5000);
+        };
+    </script>
+</body>
+</html>
